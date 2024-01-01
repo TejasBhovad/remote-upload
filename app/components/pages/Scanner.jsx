@@ -87,36 +87,7 @@ const Scanner = () => {
           }}
         />
       )}
-      {/* {isScannerLoaded && (
-        <QrScanner
-          onResult={(result) => setData(result)}
-          onError={(err) => {
-            console.log(err);
-            if (err.name === "NotAllowedError") {
-              alert(
-                "Camera access was denied. Please allow access from your browser settings to use the scanner."
-              );
-            }
-          }}
-        />
-      )} */}
       <span className="text-sm"> {data?.text}</span>
-
-      {/* <button
-        onClick={handleDownload}
-        className="text-[.95rem] bg-blue-400 w-1/2 rounded-sm"
-      >
-        Download
-      </button>
-      <button
-        onClick={handleDelete}
-        className="text-[.95rem] bg-blue-400 w-1/2 rounded-sm"
-      >
-        Delete
-      </button> */}
-      {/* {filePaths.map((filePath) => (
-        <p className="text-sm">{filePath}</p>
-      ))} */}
     </div>
   );
 };

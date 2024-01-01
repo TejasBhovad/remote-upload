@@ -32,8 +32,6 @@ const Generator = () => {
           }}
         />
       )}
-      {/* show encrypted text */}
-      {text && <p className="text-[.95rem]">{}</p>}
     </div>
   );
 };
