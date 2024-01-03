@@ -1,6 +1,1 @@
-{
-files:[
-"link_1",
-"link_2",
-]
-}
+Remote Upload (name undecided) is a tool that allows file transfer between from a device w/o sign in to your email. This allows for sharing files from PCs where you don’t want to login for privacy concerns. Upload files on pc on given uploader and sign in in your phone and scan the QR displayed to receive the files to your email.  
