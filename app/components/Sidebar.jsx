@@ -8,7 +8,7 @@ import "../styles/utils.css";
 const Sidebar = () => {
   return (
     <section>
-      <div className="hidden md:flex absolute h-full w-full top-[40%] mx-4 w-12 h-44   rounded-md bg-opacity-25 flex-col items-center justify-center gap-2 px-0.5">
+      <div className="hidden md:flex absolute top-[40%] mx-4 w-12 h-44   rounded-md bg-opacity-25 flex-col items-center justify-center gap-2 px-0.5">
         <Link
           href="/"
           className="w-full bg-secondary bg-opacity-30 aspect-square rounded-lg flex items-center justify-center hover:bg-accent hover:bg-opacity-25 circle-transform"
@@ -16,13 +16,13 @@ const Sidebar = () => {
           <Home />
         </Link>
         <Link
-          href="/scanner"
+          href="/scan"
           className="w-full bg-secondary bg-opacity-30 aspect-square rounded-lg flex items-center justify-center hover:bg-accent hover:bg-opacity-25 circle-transform"
         >
           <Scanner />
         </Link>
         <Link
-          href="/generator"
+          href="/upload"
           className="w-full bg-secondary bg-opacity-30 aspect-square rounded-lg flex items-center justify-center hover:bg-accent transition-all hover:bg-opacity-25 circle-transform"
         >
           <Upload />
@@ -39,13 +39,13 @@ const Sidebar = () => {
             <Home />
           </Link>
           <Link
-            href="/scanner"
+            href="/scan"
             className="w-full bg-secondary bg-opacity-30 aspect-square rounded-lg flex items-center justify-center hover:bg-accent hover:bg-opacity-25 circle-transform"
           >
             <Scanner />
           </Link>
           <Link
-            href="/generator"
+            href="/upload"
             className="w-full bg-secondary bg-opacity-30 aspect-square rounded-lg flex items-center justify-center hover:bg-accent transition-all hover:bg-opacity-25 circle-transform"
           >
             <Upload />
