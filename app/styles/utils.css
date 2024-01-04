@@ -1,0 +1,26 @@
+.circle-transform:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
+  border-radius: 100%;
+}
+.circle-transform {
+  transition: all 0.4s ease-in-out;
+}
+/* for touch screen */
+.circle-transform:active {
+  transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
+  border-radius: 100%;
+}
+
+.slow-fade {
+  transition: all 0.3s ease-in-out;
+}
+.slow-fade:hover {
+  opacity: 0.8;
+  transition: all 0.4s ease-in-out;
+}
+.slow-fade:active {
+  opacity: 0.8;
+  transition: all 0.4s ease-in-out;
+}
