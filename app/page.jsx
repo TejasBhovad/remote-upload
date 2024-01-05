@@ -7,7 +7,6 @@ import Generator from "@/app/components/pages/Generator";
 
 const Home = () => {
   const [isMobile, setIsMobile] = useState(false);
-
   useEffect(() => {
     if (window.innerWidth < 640) {
       setIsMobile(true);
