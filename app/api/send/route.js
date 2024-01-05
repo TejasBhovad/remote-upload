@@ -21,8 +21,8 @@ export async function POST(req) {
   }));
 
   const { data, error } = await resend.emails.send({
-    from: "Tejas <onboarding@resend.dev>",
-    to: ["tejasbhovad@gmail.com"],
+    from: "Tejas <remoteupload@updates.tejasbhovad.com>",
+    to: email,
     subject: "RemoteUpload - New Files",
     react: <FilesEmail username={username} userImage={image} />,
     attachments,
