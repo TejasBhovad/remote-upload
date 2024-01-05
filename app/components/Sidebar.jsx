@@ -8,7 +8,7 @@ import "../styles/utils.css";
 const Sidebar = () => {
   return (
     <section>
-      <div className="hidden md:flex absolute top-[40%] mx-4 w-12 h-44   rounded-md bg-opacity-25 flex-col items-center justify-center gap-2 px-0.5">
+      <div className="z-100 hidden md:flex absolute top-[40%] mx-4 w-12 h-44   rounded-md bg-opacity-25 flex-col items-center justify-center gap-2 px-0.5">
         <Link
           href="/"
           className="w-full bg-secondary bg-opacity-30 aspect-square rounded-lg flex items-center justify-center hover:bg-accent hover:bg-opacity-25 circle-transform"
@@ -29,7 +29,7 @@ const Sidebar = () => {
         </Link>
       </div>
       {/* for mobile devices sidebar should be at bottom center */}
-      <div className="w-full items-center flex justify-center">
+      <div className="z-100 w-full items-center flex justify-center">
         {" "}
         <div className="flex md:hidden absolute  bottom-8 mx-4 h-12 w-48 rounded-md bg-opacity-25 items-center justify-center gap-4 px-0.5">
           <Link

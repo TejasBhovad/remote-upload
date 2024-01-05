@@ -14,7 +14,7 @@ const page = () => {
       setUserEmail(session.user.email);
     }
   }, [status]);
-
+  // const session = true;
   return (
     <div className="h-full w-full flex gap-8 flex-col">
       <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-between px-4">
@@ -24,7 +24,9 @@ const page = () => {
         {session ? <Signout /> : <Signin />}
       </div>
       {session ? (
-        <div className="">Scanner</div>
+        <div className="w-full h-full">
+          <Scanner userEmail={userEmail} />
+        </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
           <span className="bg-secondary bg-opacity-25 px-4 py-2 border-utility border-2 rounded-sm mb-20">
