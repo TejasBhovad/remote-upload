@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@uploadthing/react": "^6.1.0",
     "@yudiel/react-qr-scanner": "^1.2.4",
@@ -16,6 +17,7 @@
     "clsx": "^2.1.0",
     "lucide-react": "^0.303.0",
     "next": "^14.0.4",
+    "next-auth": "^4.24.5",
     "next-qrcode": "^2.5.1",
     "react": "^18",
     "react-dom": "^18",

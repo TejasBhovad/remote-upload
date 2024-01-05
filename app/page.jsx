@@ -43,13 +43,3 @@ const Home = () => {
 };
 
 export default Home;
-
-{
-  /* <div className="hidden sm:flex w-full h-full bg-blue-500 text-white text-4xl flex justify-center items-center">
-        <Generator />
-      </div>
-
-      <div className="flex sm:hidden w-full h-full bg-green-500 text-white text-4xl flex justify-center items-center">
-        <Scanner />
-      </div> */
-}

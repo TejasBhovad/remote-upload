@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import AuthProvider from "@/app/components/AuthProvider";
 import "./globals.css";
 import ".//styles/utils.css";
 import Sidebar from "@/app/components/Sidebar";
@@ -11,13 +12,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="w-full h-full">
-      <body className={`${inter.className} w-full h-full`}>
-        <main className="w-full h-full bg-background">
-          <Sidebar />
-          {children}
-        </main>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="en" className="w-full h-full">
+        <body className={`${inter.className} w-full h-full`}>
+          <main className="w-full h-full bg-background">
+            <Sidebar />
+            {children}
+          </main>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
