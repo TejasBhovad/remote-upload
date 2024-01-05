@@ -3,7 +3,7 @@ import { extname } from "path";
 import { writeFileSync, mkdirSync, unlinkSync } from "fs";
 
 const downloadFiles = async (url) => {
-  console.log(url);
+  // console.log(url);
   const response = await fetch(url);
   const buffer = await response.arrayBuffer();
   const data = Buffer.from(buffer);
@@ -12,7 +12,7 @@ const downloadFiles = async (url) => {
   mkdirSync(dir, { recursive: true });
 
   const path = `${dir}/${getFileName(url)}.${getFileExtension(url)}`;
-  console.log(path);
+  // console.log(path);
   writeFileSync(path, data);
 
   return path;

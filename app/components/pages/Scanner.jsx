@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { QrScanner } from "@yudiel/react-qr-scanner";
 import { downloadFiles, deleteFiles } from "@/app/queries/download";
 import { decrypt } from "@/app/queries/encryption";
 import { sendEmail } from "@/app/queries/email";
 
-const Scanner = ({ userEmail = "default@email.com" }) => {
+const Scanner = ({
+  userEmail = "default@email.com",
+  name = "default",
+  image = "image",
+}) => {
   const [data, setData] = useState(null);
 
   const [filePaths, setFilePaths] = useState([]);
   const [fileUrls, setFileUrls] = useState([]);
   const [email, setEmail] = useState(userEmail);
+  const [username, setUsername] = useState(name);
+  const [userImage, setUserImage] = useState(image);
 
   const handleDownload = async () => {
     const downloadPromises = fileUrls.map((url) => downloadFiles(url));
@@ -24,12 +31,20 @@ const Scanner = ({ userEmail = "default@email.com" }) => {
   };
 
   const handleEmail = async () => {
-    await sendEmail(email, filePaths);
+    await sendEmail(email, filePaths, username, userImage);
   };
 
   useEffect(() => {
     setEmail(userEmail);
   }, [userEmail]);
+
+  useEffect(() => {
+    setUsername(name);
+  }, [name]);
+
+  useEffect(() => {
+    setUserImage(image);
+  }, [image]);
 
   useEffect(() => {
     if (data?.text) {
@@ -54,28 +69,36 @@ const Scanner = ({ userEmail = "default@email.com" }) => {
   // delete files
   useEffect(() => {
     if (filePaths.length > 0) {
-      handleDelete();
+      // handleDelete();
     }
   }, [filePaths]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-start gap-4 py-12">
       {data && (
-        <div className="text-secondary text-md w-full h-full flex items-center justify-center ">
+        <div className="text-secondary text-md w-full h-full flex items-center justify-center flex-col">
           <span className="bg-secondary bg-opacity-25 px-4 py-2 border-utility border-2 rounded-sm mb-20">
             <h1 className="font-semibold text-transparent text-xl sm:text-2xl lg:text-3xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
               Email Sent to {email}
             </h1>
           </span>
+          {/* button to clear data */}
+          <div className="w-full flex items-center justify-center">
+            <Button
+              className="slow-fade text-md sm:text-xl lg:text-2xl lg:px-18 lg:py-6 font-semibold text-white transition-all bg-accent px-10 py-2 mt-4 transition-all hover:text-text bg-opacity-75"
+              onClick={() => setData(null)}
+            >
+              Reset
+            </Button>{" "}
+          </div>
         </div>
       )}
-      <div className="w-full md:w-1/2 px-8 aspect-square rounded-md object-cover flex flex-col gap-2">
-        {!data && (
+      {!data && (
+        <div className="w-full md:w-1/2 px-8 aspect-square rounded-md object-cover flex flex-col gap-2">
           <div className="text-sm text-center bg-secondary w-full bg-opacity-50 rounded-md text-text py-1 px-2">
             {email}
           </div>
-        )}
-        {!data && (
+
           <QrScanner
             className="rounded-md"
             onResult={(result) => setData(result)}
@@ -88,8 +111,8 @@ const Scanner = ({ userEmail = "default@email.com" }) => {
               }
             }}
           />
-        )}
-      </div>
+        </div>
+      )}
       {/* <span className="text-sm"> {data?.text}</span> */}
     </div>
   );

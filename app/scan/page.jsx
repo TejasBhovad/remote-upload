@@ -7,14 +7,18 @@ import Signout from "../components/Signout";
 import { useSession } from "next-auth/react";
 
 const page = () => {
-  // const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
   const [userEmail, setUserEmail] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [image, setImage] = useState(null);
   useEffect(() => {
     if (status === "authenticated") {
       setUserEmail(session.user.email);
+      setUsername(session.user.name);
+      setImage(session.user.image);
     }
   }, [status]);
-  const session = true;
+  // const session = true;
   return (
     <div className="h-full w-full flex gap-8 flex-col">
       <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-between px-4">
@@ -25,7 +29,7 @@ const page = () => {
       </div>
       {session ? (
         <div className="w-full h-full">
-          <Scanner userEmail={userEmail} />
+          <Scanner userEmail={userEmail} name={username} image={image} />
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">

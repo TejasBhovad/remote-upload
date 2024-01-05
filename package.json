@@ -11,6 +11,7 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
+    "@react-email/components": "0.0.12",
     "@uploadthing/react": "^6.1.0",
     "@yudiel/react-qr-scanner": "^1.2.4",
     "class-variance-authority": "^0.7.0",
@@ -21,6 +22,8 @@
     "next-qrcode": "^2.5.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-email": "1.10.0",
+    "resend": "^2.1.0",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.1.1"
