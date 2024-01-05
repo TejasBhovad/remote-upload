@@ -33,7 +33,7 @@ const page = () => {
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
-          <span className="bg-secondary bg-opacity-25 px-4 py-2 border-utility border-2 rounded-sm mb-20">
+          <span className="bg-secondary bg-opacity-15 px-4 py-2 border-utility border-2 rounded-sm mb-20">
             <h1 className="font-semibold text-transparent text-xl sm:text-2xl lg:text-3xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
               Sign in to Scan Files
             </h1>

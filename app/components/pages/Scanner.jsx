@@ -27,7 +27,7 @@ const Scanner = ({
   const handleDelete = async () => {
     const deletePromises = filePaths.map((path) => deleteFiles(path));
     await Promise.all(deletePromises);
-    console.log("All files deleted");
+    // console.log("All files deleted");
   };
 
   const handleEmail = async () => {
@@ -69,7 +69,10 @@ const Scanner = ({
   // delete files
   useEffect(() => {
     if (filePaths.length > 0) {
-      // handleDelete();
+      setTimeout(() => {
+        handleDelete();
+      }, 10000);
+
     }
   }, [filePaths]);
 

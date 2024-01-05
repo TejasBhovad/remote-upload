@@ -13,36 +13,36 @@ const page = () => {
   const [showQR, setShowQR] = useState(false);
   const [text, setText] = useState("");
   const [files, setFiles] = useState([
-    {
-      name: "image-1.jpg",
-      size: 100000,
-      type: "image/jpeg",
-      url: "https://utfs.io/f/22865c40-92dd-45fc-8c52-2363c6129203-stjq8f.png",
-    },
-    {
-      name: "image-2.jpg",
-      size: 100000,
-      type: "image/jpeg",
-      url: "https://utfs.io/f/d90bf0a7-f5de-48a8-9c06-24eb94264864-5molc3.png",
-    },
-    {
-      name: "image-3.jpg",
-      size: 100000,
-      type: "image/jpeg",
-      url: "https://utfs.io/f/9403bfee-edd1-47b7-8208-88e285d7fc08-1v.png",
-    },
-    {
-      name: "image-4.jpg",
-      size: 100000,
-      type: "image/jpeg",
-      url: "https://utfs.io/f/22865c40-92dd-45fc-8c52-2363c6129203-stjq8f.png",
-    },
-    {
-      name: "image-5.jpg",
-      size: 100000,
-      type: "image/jpeg",
-      url: "https://utfs.io/f/d90bf0a7-f5de-48a8-9c06-24eb94264864-5molc3.png",
-    },
+    // {
+    //   name: "image-1.jpg",
+    //   size: 100000,
+    //   type: "image/jpeg",
+    //   url: "https://utfs.io/f/22865c40-92dd-45fc-8c52-2363c6129203-stjq8f.png",
+    // },
+    // {
+    //   name: "image-2.jpg",
+    //   size: 100000,
+    //   type: "image/jpeg",
+    //   url: "https://utfs.io/f/d90bf0a7-f5de-48a8-9c06-24eb94264864-5molc3.png",
+    // },
+    // {
+    //   name: "image-3.jpg",
+    //   size: 100000,
+    //   type: "image/jpeg",
+    //   url: "https://utfs.io/f/9403bfee-edd1-47b7-8208-88e285d7fc08-1v.png",
+    // },
+    // {
+    //   name: "image-4.jpg",
+    //   size: 100000,
+    //   type: "image/jpeg",
+    //   url: "https://utfs.io/f/22865c40-92dd-45fc-8c52-2363c6129203-stjq8f.png",
+    // },
+    // {
+    //   name: "image-5.jpg",
+    //   size: 100000,
+    //   type: "image/jpeg",
+    //   url: "https://utfs.io/f/d90bf0a7-f5de-48a8-9c06-24eb94264864-5molc3.png",
+    // },
   ]);
   const handleShare = () => {
     setShowQR(true);
@@ -106,7 +106,7 @@ const page = () => {
               console.log("Files: ", res);
               // append to files
               setFiles([...files, ...res]);
-              alert("Upload Completed");
+              // alert("Upload Completed");
             }}
             onUploadError={(error) => {
               alert(`ERROR! ${error.message}`);

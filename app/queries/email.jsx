@@ -2,12 +2,12 @@
 const sendEmail = async (email, attachmentPaths, name, image) => {
   console.log(email);
 
-  console.log("name: " + name);
-  console.log("image: " + image);
+  // console.log("name: " + name);
+  // console.log("image: " + image);
   const attachmentNames = attachmentPaths.map((path) =>
     path.replace("public/", "")
   );
-  console.log("path: " + attachmentNames);
+  // console.log("path: " + attachmentNames);
 
   const response = await fetch("/api/send", {
     method: "POST",
