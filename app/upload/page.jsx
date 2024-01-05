@@ -93,14 +93,14 @@ const page = () => {
       </div>
       <div className="w-full flex items-center justify-center">
         {files.length >= FileLimit ? (
-          <div className="p-1 w-1/3 h-48 min-w-64 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
+          <div className="p-1 w-1/3 sm:h-48 py-3 min-w-64 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
             <h1 className="text-accent font-semibold px-8">
               You can only upload {FileLimit} files at a time
             </h1>
           </div>
         ) : (
           <UploadDropzone
-            className="p-1 w-1/3 h-48 min-w-64"
+            className="p-1 w-1/3 sm:h-48 min-w-64"
             endpoint="imageUploader"
             onClientUploadComplete={(res) => {
               console.log("Files: ", res);
@@ -119,7 +119,7 @@ const page = () => {
         {files.map((file, index) => (
           <div
             key={index}
-            className="bg-secondary bg-opacity-50 w-1/2 py-3 px-4 rounded-md flex items-center justify-between gap-2"
+            className="bg-secondary bg-opacity-50 sm:w-1/2 py-3 px-4 rounded-md flex items-center justify-between gap-2"
           >
             <div className="flex items-center gap-2">
               <span>

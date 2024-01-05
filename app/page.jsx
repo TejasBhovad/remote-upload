@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-
+import { useRouter } from "next/navigation";
 import Scanner from "@/app/components/pages/Scanner";
 import Generator from "@/app/components/pages/Generator";
 
 const Home = () => {
+  const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     if (window.innerWidth < 640) {
@@ -17,8 +18,10 @@ const Home = () => {
     console.log("Get Started");
     if (isMobile) {
       console.log("Mobile");
+      router.push("/scan");
     } else {
       console.log("PC");
+      router.push("/upload");
     }
   };
 

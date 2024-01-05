@@ -4,7 +4,7 @@ import { downloadFiles, deleteFiles } from "@/app/queries/download";
 import { decrypt } from "@/app/queries/encryption";
 import { sendEmail } from "@/app/queries/email";
 
-const Scanner = ({ userEmail }) => {
+const Scanner = ({ userEmail = "default@email.com" }) => {
   const [data, setData] = useState(null);
 
   const [filePaths, setFilePaths] = useState([]);

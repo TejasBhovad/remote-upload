@@ -9,9 +9,9 @@ export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   imageUploader: f({
     image: { maxFileSize: "4MB" },
-    "text/markdown": { maxFileSize: "4MB" },
-    // add for all file types
-    "*/*": { maxFileSize: "4MB" },
+    "application/zip": { maxFileSize: "4MB" },
+    blob: { maxFileSize: "4MB" },
+    text: { maxFileSize: "4MB" },
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {

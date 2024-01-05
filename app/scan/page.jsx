@@ -7,14 +7,14 @@ import Signout from "../components/Signout";
 import { useSession } from "next-auth/react";
 
 const page = () => {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   const [userEmail, setUserEmail] = useState(null);
   useEffect(() => {
     if (status === "authenticated") {
       setUserEmail(session.user.email);
     }
   }, [status]);
-  // const session = true;
+  const session = true;
   return (
     <div className="h-full w-full flex gap-8 flex-col">
       <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-between px-4">
