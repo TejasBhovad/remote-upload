@@ -18,7 +18,6 @@ const page = () => {
       setImage(session.user.image);
     }
   }, [status]);
-  // const session = true;
   return (
     <div className="h-full w-full flex gap-8 flex-col">
       <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-between px-4">
