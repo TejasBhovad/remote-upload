@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { QrScanner } from "@yudiel/react-qr-scanner";
-import { downloadFiles, deleteFiles } from "@/app/queries/download";
-import { decrypt } from "@/app/queries/encryption";
 import { sendEmail } from "@/app/queries/email";
 
 const Scanner = ({
@@ -11,25 +9,10 @@ const Scanner = ({
   image = "image",
 }) => {
   const [data, setData] = useState(null);
-
-  // const [filePaths, setFilePaths] = useState([]);
   const [fileUrls, setFileUrls] = useState([]);
   const [email, setEmail] = useState(userEmail);
   const [username, setUsername] = useState(name);
   const [userImage, setUserImage] = useState(image);
-
-  // const handleDownload = async () => {
-  //   const downloadPromises = fileUrls.map((url) => downloadFiles(url));
-  //   const filePaths = await Promise.all(downloadPromises);
-  //   setFilePaths(filePaths);
-  //   console.log("paths: ", filePaths);
-  // };
-
-  // const handleDelete = async () => {
-  //   const deletePromises = filePaths.map((path) => deleteFiles(path));
-  //   await Promise.all(deletePromises);
-  //   // console.log("All files deleted");
-  // };
 
   const handleEmail = async () => {
     await sendEmail(email, fileUrls, username, userImage);
@@ -53,29 +36,11 @@ const Scanner = ({
     }
   }, [data]);
 
-  // // download files
-  // useEffect(() => {
-  //   if (fileUrls.length > 0) {
-  //     handleDownload();
-  //   }
-  // }, [fileUrls]);
-
-  // send email
   useEffect(() => {
     if (fileUrls.length > 0) {
       handleEmail();
     }
   }, [fileUrls]);
-
-  // // delete files
-  // useEffect(() => {
-  //   if (filePaths.length > 0) {
-  //     setTimeout(() => {
-  //       handleDelete();
-  //     }, 10000);
-  //   }
-  // }, [filePaths]);
-
   return (
     <div className="w-full h-full flex flex-col items-center justify-start gap-4 py-12">
       {data && (
@@ -116,7 +81,6 @@ const Scanner = ({
           />
         </div>
       )}
-      {/* <span className="text-sm"> {data?.text}</span> */}
     </div>
   );
 };

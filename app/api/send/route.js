@@ -1,7 +1,5 @@
 import FilesEmail from "@/app/components/Email";
 import { Resend } from "resend";
-import fs from "fs";
-import path from "path";
 import https from "https";
 
 function URLToBase64(url) {
@@ -17,11 +15,6 @@ function URLToBase64(url) {
 
 const RESEND_API_KEY = process.env.NEXT_PUBLIC_RESEND_API_KEY;
 
-function fileToBase64(filename) {
-  const filePath = path.join(process.cwd(), "files", filename);
-  const file = fs.readFileSync(filePath);
-  return Buffer.from(file).toString("base64");
-}
 
 export async function POST(req) {
   const { email, filenames, username, image } = await req.json();
@@ -30,7 +23,7 @@ export async function POST(req) {
   const attachments = await Promise.all(
     filenames.map(async (filename) => ({
       filename,
-      content: await URLToBase64(filename), // Convert each file to base64
+      content: await URLToBase64(filename),
     }))
   );
 
