@@ -22,6 +22,7 @@ const Scanner = ({
     const downloadPromises = fileUrls.map((url) => downloadFiles(url));
     const filePaths = await Promise.all(downloadPromises);
     setFilePaths(filePaths);
+    console.log("paths: ", filePaths);
   };
 
   const handleDelete = async () => {

@@ -7,7 +7,7 @@ const downloadFiles = async (url) => {
   const buffer = await response.arrayBuffer();
   const data = Buffer.from(buffer);
 
-  const dir = "public";
+  const dir = "files";
   mkdirSync(dir, { recursive: true });
 
   const path = `${dir}/${getFileName(url)}.${getFileExtension(url)}`;

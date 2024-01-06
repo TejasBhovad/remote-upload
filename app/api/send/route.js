@@ -6,7 +6,7 @@ import path from "path";
 const RESEND_API_KEY = process.env.NEXT_PUBLIC_RESEND_API_KEY;
 
 function fileToBase64(filename) {
-  const filePath = path.join(process.cwd(), "public", filename);
+  const filePath = path.join(process.cwd(), "files", filename);
   const file = fs.readFileSync(filePath);
   return Buffer.from(file).toString("base64");
 }

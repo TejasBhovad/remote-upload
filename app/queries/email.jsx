@@ -1,9 +1,9 @@
 const sendEmail = async (email, attachmentPaths, name, image) => {
   console.log(email);
   const attachmentNames = attachmentPaths.map((path) =>
-    path.replace("public/", "")
+    path.replace("files/", "")
   );
-
+  console.log(attachmentNames);
   const response = await fetch("/api/send", {
     method: "POST",
     headers: {
