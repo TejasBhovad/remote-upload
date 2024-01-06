@@ -10,6 +10,7 @@ export const metadata = {
   description: "Upload files to your computer from anywhere in the world.",
   icons: {
     favicon: "/favicon.ico",
+    appleTouchIcon: "/favicon.png",
   },
 };
 
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
     <AuthProvider>
       <html lang="en" className="w-full h-full">
         <head>
-          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="icon" href="/favicon.png" sizes="any" />
         </head>
         <body className={`${inter.className} w-full h-full`}>
           <main className="w-full h-full bg-background">

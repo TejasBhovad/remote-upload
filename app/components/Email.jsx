@@ -35,7 +35,7 @@ export const FilesEmail = ({
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Section className="mt-[32px]">
               <Img
-                src="/favicon.png"
+                src="https://remoteupload.vercel.app/favicon.png"
                 width="40"
                 height="37"
                 alt="remoteUpload"
