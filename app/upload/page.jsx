@@ -12,8 +12,7 @@ const page = () => {
   const FileLimit = 5;
   const [showQR, setShowQR] = useState(false);
   const [text, setText] = useState("");
-  const [files, setFiles] = useState([
-  ]);
+  const [files, setFiles] = useState([]);
   const handleShare = () => {
     setShowQR(true);
     setText(JSON.stringify(files.map((file) => file.url)));
@@ -60,7 +59,7 @@ const page = () => {
           RemoteUpload
         </h1>
       </div>
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full h-full flex items-start justify-center py-12">
         {files.length >= FileLimit ? (
           <div className="p-1 w-1/3 sm:h-48 py-3 min-w-64 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
             <h1 className="text-accent font-semibold px-8">
@@ -69,7 +68,7 @@ const page = () => {
           </div>
         ) : (
           <UploadDropzone
-            className="p-1 w-1/3 sm:h-48 min-w-64"
+            className="p-1 w-1/3 h-1/4 min-w-64 ut-allowed-content:text-opacity-50 bg-transparent ut-label:text-secondary sm:ut-label:text-md ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
             endpoint="imageUploader"
             onClientUploadComplete={(res) => {
               console.log("Files: ", res);

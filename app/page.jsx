@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-
 const Home = () => {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
@@ -27,10 +26,10 @@ const Home = () => {
   return (
     <div className="w-full h-full bg-background items-center flex">
       <div className="h-48 sm:h-96 w-full transition-all flex flex-col items-center justify-center text-center gap-2 px-4">
-        <h1 className="font-extrabold text-transparent text-4xl sm:text-7xl lg:text-8xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
+        <h1 className="select-none font-extrabold text-transparent text-5xl sm:text-7xl lg:text-8xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
           RemoteUpload
         </h1>
-        <span className="text-text text-md sm:text-2xl lg:text-3xl transition-all font-medium">
+        <span className="select-none text-text text-md sm:text-2xl lg:text-3xl transition-all font-medium">
           upload files remotely with ease
         </span>
         <Button

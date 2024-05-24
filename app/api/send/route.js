@@ -15,7 +15,6 @@ function URLToBase64(url) {
 
 const RESEND_API_KEY = process.env.NEXT_PUBLIC_RESEND_API_KEY;
 
-
 export async function POST(req) {
   const { email, filenames, username, image } = await req.json();
   const resend = new Resend(RESEND_API_KEY);
