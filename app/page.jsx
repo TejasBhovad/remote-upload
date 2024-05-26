@@ -14,6 +14,7 @@ const Home = () => {
 
   const handleGetStarted = () => {
     console.log("Get Started");
+
     if (isMobile) {
       console.log("Mobile");
       router.push("/scan");
@@ -33,7 +34,7 @@ const Home = () => {
           upload files remotely with ease
         </span>
         <Button
-          className="slow-fade text-md sm:text-xl lg:text-2xl lg:px-18 lg:py-6 font-semibold text-white transition-all bg-accent px-10 py-2 mt-4 transition-all hover:text-text bg-opacity-75"
+          className="slow-fade text-md sm:text-xl lg:text-2xl lg:px-18 lg:py-6 font-semibold text-white bg-accent px-10 py-2 mt-4 transition-all hover:text-text bg-opacity-75"
           onClick={handleGetStarted}
         >
           Get Started

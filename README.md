@@ -26,10 +26,6 @@ File sharing website which allows you to transfer files from a PC straight to yo
 
 > Note: This project is still in development and some features may not work as expected.
 
-## Known Issues
-
-- Only one file can be uploaded at a time, but multiple files can be shared at once
-
 ## License
 
 [MIT](LICENSE)
