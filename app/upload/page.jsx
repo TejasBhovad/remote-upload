@@ -53,67 +53,70 @@ const page = () => {
       </div>
     </div>
   ) : (
-    <div className="h-full w-full flex gap-8 flex-col">
+    <div className="h-full w-full flex gap-8 flex-col pb-32">
       <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-center">
         <h1 className="font-extrabold text-transparent text-2xl sm:text-4xl lg:text-5xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
           RemoteUpload
         </h1>
       </div>
-      <div className="w-full h-full flex items-start justify-center py-12">
-        {files.length >= FileLimit ? (
-          <div className="p-1 w-1/3 sm:h-48 py-3 min-w-64 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
-            <h1 className="text-accent font-semibold px-8">
-              You can only upload {FileLimit} files at a time
-            </h1>
-          </div>
-        ) : (
-          <UploadDropzone
-            className="p-1 w-1/3 h-1/4 min-w-64 ut-allowed-content:text-opacity-50 bg-transparent ut-label:text-secondary sm:ut-label:text-md ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
-            endpoint="imageUploader"
-            onClientUploadComplete={(res) => {
-              console.log("Files: ", res);
-              setFiles([...files, ...res]);
-            }}
-            onUploadError={(error) => {
-              alert(`ERROR! ${error.message}`);
-            }}
-          />
-        )}
-      </div>
-
-      <ul className="w-full items-center flex flex-col gap-2 select-none">
-        {files.map((file, index) => (
-          <div
-            key={index}
-            className="bg-secondary bg-opacity-50 sm:w-1/2 py-3 px-4 rounded-md flex items-center justify-between gap-2"
-          >
-            <div className="flex items-center gap-2">
-              <span>
-                <Folder />
-              </span>
-              <li className="text-text">
-                {typeof file === "object" ? file.name : file}
-              </li>
+      <div className="w-full h-full flex-col flex items-start justify-start py-12">
+        <div className="h-1/4 w-full flex items-center justify-center">
+          {files.length >= FileLimit ? (
+            <div className="p-1 h-full w-1/3 sm:h-48 py-3 min-w-64 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
+              <h1 className="text-accent font-semibold px-8">
+                You can only upload {FileLimit} files at a time
+              </h1>
             </div>
-            <div
-              onClick={handleRemoveFile(file.url)}
-              className="hover:bg-accent hover:bg-opacity-25 p-1 hover:rounded-full cursor-pointer transition-all"
-            >
-              <Cross />
-            </div>
-          </div>
-        ))}
-      </ul>
-      {files.length > 0 && (
-        <div className="w-full flex items-center justify-center">
-          <Button
-            className="w-32 font-semibold text-text"
-            onClick={handleShare}
-          >
-            Share
-          </Button>
+          ) : (
+            <UploadDropzone
+              className="p-1 w-1/3 h-5/6 min-w-64 ut-allowed-content:text-opacity-50 bg-transparent ut-label:text-secondary sm:ut-label:text-md ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                console.log("Files: ", res);
+                setFiles([...files, ...res]);
+              }}
+              onUploadError={(error) => {
+                alert(`ERROR! ${error.message}`);
+              }}
+            />
+          )}
         </div>
-      )}
+        <div className="w-full h-1/2 flex flex-col py-4 gap-4">
+          <ul className="w-full items-center flex flex-col gap-2 select-none">
+            {files.map((file, index) => (
+              <div
+                key={index}
+                className="bg-secondary bg-opacity-50 w-1/3 sm:w-1/3 py-3 px-4 rounded-md flex items-center justify-between gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span>
+                    <Folder />
+                  </span>
+                  <li className="text-text">
+                    {typeof file === "object" ? file.name : file}
+                  </li>
+                </div>
+                <div
+                  onClick={handleRemoveFile(file.url)}
+                  className="hover:bg-accent hover:bg-opacity-25 p-1 hover:rounded-full cursor-pointer transition-all"
+                >
+                  <Cross />
+                </div>
+              </div>
+            ))}
+          </ul>
+          {files.length > 0 && (
+            <div className="w-full flex items-center justify-center">
+              <Button
+                className="w-32 font-semibold text-text"
+                onClick={handleShare}
+              >
+                Share
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
