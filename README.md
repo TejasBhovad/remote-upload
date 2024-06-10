@@ -29,3 +29,7 @@ File sharing website which allows you to transfer files from a PC straight to yo
 ## License
 
 [MIT](LICENSE)
+
+## Project Documentation
+
+[Notion Document](https://tejasbhovad.notion.site/RemoteUpload-9660f8aacd5e4234a837411ae124a664)
