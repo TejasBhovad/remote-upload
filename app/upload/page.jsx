@@ -6,8 +6,10 @@ import Cross from "@/app/components/logos/Cross";
 import Folder from "@/app/components/logos/Folder";
 import { Button } from "@/components/ui/button";
 import { useQRCode } from "next-qrcode";
+import { useToast } from "@/components/ui/use-toast";
 
 const page = () => {
+  const { toast } = useToast();
   const { SVG } = useQRCode();
   const FileLimit = 5;
   const [showQR, setShowQR] = useState(false);
@@ -25,8 +27,8 @@ const page = () => {
   };
   return showQR ? (
     <div className="h-full w-full flex gap-8 flex-col">
-      <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-center">
-        <h1 className="font-extrabold text-transparent text-2xl sm:text-4xl lg:text-5xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
+      <div className="select-none w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-center">
+        <h1 className="select-none font-extrabold text-transparent text-2xl sm:text-4xl lg:text-5xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
           RemoteUpload
         </h1>
       </div>
@@ -54,7 +56,7 @@ const page = () => {
     </div>
   ) : (
     <div className="h-full w-full flex gap-8 flex-col pb-32">
-      <div className="w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-center">
+      <div className="select-none  w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-center">
         <h1 className="font-extrabold text-transparent text-2xl sm:text-4xl lg:text-5xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
           RemoteUpload
         </h1>
@@ -76,7 +78,12 @@ const page = () => {
                 setFiles([...files, ...res]);
               }}
               onUploadError={(error) => {
-                alert(`ERROR! ${error.message}`);
+                console.error("Error: ", error);
+                toast({
+                  title: "Error",
+                  description: error.message,
+                  type: "error",
+                });
               }}
             />
           )}
@@ -87,6 +94,9 @@ const page = () => {
               <div
                 key={index}
                 className="bg-secondary bg-opacity-50 w-1/3 sm:w-1/3 py-3 px-4 rounded-md flex items-center justify-between gap-2"
+                style={{
+                  minWidth: "256px",
+                }}
               >
                 <div className="flex items-center gap-2">
                   <span>

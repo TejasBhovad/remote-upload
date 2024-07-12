@@ -3,6 +3,7 @@ import AuthProvider from "@/app/components/AuthProvider";
 import "./globals.css";
 import ".//styles/utils.css";
 import Sidebar from "@/app/components/Sidebar";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
             <Sidebar />
             {children}
           </main>
+          <Toaster />
         </body>
       </html>
     </AuthProvider>
