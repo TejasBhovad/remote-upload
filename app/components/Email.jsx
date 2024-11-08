@@ -20,7 +20,7 @@ const baseUrl = process.env.NEXT_PUBLIC_URL;
 
 export const FilesEmail = ({
   brandName = "remoteUpload",
-  username = "zenorocha",
+  username = "default",
   userImage = `${baseUrl}/favicon.png`,
   ghLink = "https://github.com/TejasBhovad/remote-upload",
 }) => {

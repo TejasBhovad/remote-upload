@@ -26,7 +26,7 @@ const page = () => {
     };
   };
   return showQR ? (
-    <div className="h-full w-full flex gap-8 flex-col">
+    <div className="h-full w-full  flex gap-8 flex-col">
       <div className="select-none w-full h-16 sm:h-24 lg:h-28 border-2 transition-all flex items-center justify-center">
         <h1 className="select-none font-extrabold text-transparent text-2xl sm:text-4xl lg:text-5xl bg-clip-text bg-gradient-to-r from-secondary to-primary transition-all">
           RemoteUpload
@@ -61,17 +61,17 @@ const page = () => {
           RemoteUpload
         </h1>
       </div>
-      <div className="w-full h-full flex-col flex items-start justify-start py-12">
-        <div className="h-1/4 w-full flex items-center justify-center">
+      <div className="w-full h-full flex-col  flex items-start justify-start py-2">
+        <div className="h-full w-full flex  items-center justify-center">
           {files.length >= FileLimit ? (
-            <div className="p-1 h-full w-1/3 sm:h-48 py-3 min-w-64 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
+            <div className="p-1 h-full w-full sm:h-48 py-3 border-2 border-dashed border-secondary text-center flex items-center justify-center rounded-sm">
               <h1 className="text-accent font-semibold px-8">
                 You can only upload {FileLimit} files at a time
               </h1>
             </div>
           ) : (
             <UploadDropzone
-              className="p-1 w-1/3 h-5/6 min-w-64 ut-allowed-content:text-opacity-50 bg-transparent ut-label:text-secondary sm:ut-label:text-md ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
+              className=" sh-5/6  0 ut-allowed-content:text-opacity-50 bg-transparent ut-label:text-secondary sm:ut-label:text-md ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
               endpoint="imageUploader"
               onClientUploadComplete={(res) => {
                 console.log("Files: ", res);
