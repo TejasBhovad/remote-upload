@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Remote Upload
 
-## Getting Started
+File sharing website which allows you to transfer files from a PC straight to your email w/o any login.
 
-First, run the development server:
+![Landing](.github/landing.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Privacy first: we don't store any user files on our servers
+- No Login required: you don't need to create an account to upload files
+- Easy to use: just upload a file and scan the QR code from logged in device
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## How to use
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Go to [remoteupload.vercel.app](https://remoteupload.vercel.app)
+- Upload files: you can upload files by clicking on the upload button or by dragging and dropping files on the page
+- Scan QR code: scan the QR code from your phone or any other device after logging in with Google
+- Download files: An email will be sent to you with the attached files
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js
+- UploadThing
+- ShadCN UI
+- Resend email
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Note: This project is still in development and some features may not work as expected.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+[MIT](LICENSE)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Notion Document](https://tejasbhovad.notion.site/RemoteUpload-9660f8aacd5e4234a837411ae124a664)
