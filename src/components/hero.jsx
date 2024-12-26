@@ -18,7 +18,7 @@ const Hero = () => {
           opacity: [0.5, 1],
           scale: [0.5, 1],
           rotate: [0, 15],
-          translateX: [0, 10],
+          translateX: [10, 20],
           translateY: [0, 10],
         },
         {
@@ -81,7 +81,7 @@ const Hero = () => {
     <div className="flex h-auto items-center justify-center bg-green-400/0 py-20 sm:w-1/2">
       <File
         ref={icon1Ref}
-        className="icon1 relative -left-2 -top-12 transition-transform hover:rotate-12 hover:scale-110"
+        className="icon1 relative -left-0 -top-12 transition-transform hover:rotate-12 hover:scale-110"
         width={48}
         height={48}
       />
@@ -91,7 +91,7 @@ const Hero = () => {
       />
       <FileArchive
         ref={icon2Ref}
-        className="icon2 relative -right-6 -top-12 transition-transform hover:rotate-12 hover:scale-110"
+        className="icon2 relative -right-12 -top-12 transition-transform hover:rotate-12 hover:scale-110"
         width={54}
         height={54}
       />
