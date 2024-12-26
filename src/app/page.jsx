@@ -2,6 +2,7 @@
 import { Google } from "@/components/icons/google";
 import Wave from "@/assets/wave";
 import Hero from "@/components/hero";
+import HeroLarge from "@/components/hero-large";
 import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
@@ -25,16 +26,11 @@ export default function Home() {
             Select the Inbox where you'd like to receive your emails.
           </span>
         </div>
-        <div className="z-10 hidden h-full w-full max-w-6xl flex-col gap-4 bg-background/10 bg-green-400 px-12 sm:flex">
-          <Hero />
-          <Button
-            variant="ghost"
-            className="w-full bg-accent text-lg font-semibold text-foreground hover:bg-accent/90"
-            onClick={() => console.log("Hello World")}
-          >
-            <Google width={24} height={24} />
-            Sign in with Google
-          </Button>
+        <div className="z-10 hidden h-full w-full max-w-6xl gap-4 bg-background/10 bg-green-400/10 px-12 pt-16 sm:flex">
+          <div className="h-full w-1/2 bg-red-400/10"></div>
+          <div className="flex h-full w-1/2 items-center justify-center bg-cyan-400/10">
+            <HeroLarge />
+          </div>
         </div>
       </div>
       <div className="relative top-6 h-auto w-full rotate-180 text-background">
