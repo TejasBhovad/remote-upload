@@ -15,7 +15,7 @@ const HeroLarge = () => {
       animate(
         mailRef.current,
         {
-          opacity: [0.5, 1],
+          opacity: [0.75, 1],
           scale: [0.5, 2.5],
           rotate: [0, 15],
           translateX: [10, 20],
@@ -34,7 +34,7 @@ const HeroLarge = () => {
         {
           opacity: [0, 1],
           scale: [0, 2],
-          rotate: [0, -30],
+          rotate: [-10, -30],
           translateX: [0, 10],
           translateY: [0, -10],
         },
@@ -81,23 +81,20 @@ const HeroLarge = () => {
     <div className="flex h-auto items-center justify-center bg-green-400/0 py-20 sm:w-1/2">
       <File
         ref={icon1Ref}
-        className="icon1 z-100 relative -left-10 -top-24 transition-all ease-linear hover:rotate-12 hover:scale-110 lg:-left-20"
+        className="icon1 z-100 relative -left-10 -top-24 transition-all ease-linear lg:-left-20"
         width={48}
         height={48}
       />
-      <Mail
-        ref={mailRef}
-        className="mail transition-transform hover:rotate-12 hover:scale-110"
-      />
+      <Mail ref={mailRef} className="mail transition-transform" />
       <FileArchive
         ref={icon2Ref}
-        className="icon2 relative -right-20 -top-16 transition-transform hover:rotate-12 hover:scale-110 lg:-right-36"
+        className="icon2 relative -right-20 -top-16 transition-transform lg:-right-36"
         width={72}
         height={72}
       />
       <Image
         ref={icon3Ref}
-        className="icon3 relative left-4 top-32 transition-transform hover:rotate-12 hover:scale-110 lg:left-8 lg:top-48"
+        className="icon3 relative left-4 top-32 transition-transform lg:left-8 lg:top-48"
         width={64}
         height={64}
       />

@@ -1,8 +1,11 @@
 "use client";
 import { Google } from "@/components/icons/google";
 import Wave from "@/assets/wave";
-import Hero from "@/components/hero";
-import HeroLarge from "@/components/hero-large";
+import { Upload } from "lucide-react";
+import Inbox from "@/components/landing/inbox";
+import Arrow from "@/components/icons/arrow";
+import Hero from "@/components/landing/hero";
+import HeroLarge from "@/components/landing/hero-large";
 import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
@@ -58,7 +61,28 @@ export default function Home() {
         <Wave />
       </div>
       <div className="flex h-screen flex-col items-center justify-center bg-foreground">
-        <div className="flex h-3/4 w-full max-w-6xl flex-col bg-red-400 sm:flex-row"></div>
+        <div className="flex h-3/4 w-full max-w-6xl flex-col">
+          <h1 className="h-fit w-full px-4 py-2 text-center text-3xl font-semibold text-background lg:text-5xl xl:text-6xl">
+            Effortless File Sharing
+          </h1>
+          <h2 className="h-fit w-full px-4 py-2 text-center text-xl font-medium text-background lg:text-2xl xl:text-3xl">
+            delivered straight to your inbox.
+          </h2>
+          <div className="flex h-full items-center justify-center">
+            <section className="flex h-full flex-col items-center justify-center gap-2 overflow-hidden px-8 py-4 sm:h-auto sm:flex-row">
+              <div className="flex aspect-square w-48 items-center justify-center rounded-lg border-4 border-dashed border-accent bg-accent/25 sm:w-64 lg:w-96">
+                <Upload className="h-16 w-16 text-accent sm:h-24 sm:w-24" />
+              </div>
+              <Arrow
+                size={80}
+                className="h-16 w-16 text-accent sm:h-24 sm:w-24"
+              />
+              <div className="h-fit w-4/5 sm:w-1/3 lg:w-1/2">
+                <Inbox />
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
       <div className="relative -top-6 h-auto w-full text-background">
         <Wave />
