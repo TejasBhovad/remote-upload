@@ -12,12 +12,12 @@ const MailCell = ({ sender, content }) => {
       }`}
     >
       <span
-        className={`h-fit w-1/2 truncate text-lg font-semibold ${isRemoteUpload ? "text-background" : "text-background"}`}
+        className={`h-fit w-1/2 truncate text-lg ${isRemoteUpload ? "font-semibold text-background" : "font-medium text-background/75"}`}
       >
         {sender}
       </span>
       <span
-        className={`h-fit w-1/2 truncate text-lg ${isRemoteUpload ? "text-background/90" : "text-background/50"}`}
+        className={`text-md h-fit w-1/2 truncate ${isRemoteUpload ? "text-background/90" : "text-background/50"}`}
       >
         {content}
       </span>
