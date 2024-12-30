@@ -14,8 +14,8 @@ export default function Home() {
   return (
     <div className="flex h-auto w-full flex-col">
       <div className="flex h-screen flex-col items-center justify-center bg-red-400/0">
-        <div className="z-10 flex h-full w-full max-w-6xl flex-col justify-between gap-8 bg-red-400/0 px-12 py-16 sm:hidden">
-          <div className="flex h-auto w-full translate-y-24 flex-col gap-8">
+        <div className="z-10 flex h-full w-full max-w-6xl flex-col justify-between gap-8 bg-red-400/0 px-12 py-4 sm:hidden">
+          <div className="flex h-auto w-full flex-col gap-8">
             <Hero />
 
             <Button
@@ -28,12 +28,12 @@ export default function Home() {
             </Button>
           </div>
 
-          <span className="text-md text-center font-medium text-foreground">
+          <span className="text-md py-8 text-center font-medium text-foreground">
             Select the Inbox where you'd like to receive your emails.
           </span>
         </div>
-        <div className="z-10 hidden h-full w-full max-w-6xl gap-4 bg-background/10 px-12 pt-16 sm:flex">
-          <div className="flex h-full w-1/2 flex-col items-center justify-center gap-8">
+        <div className="z-10 hidden h-full w-full max-w-6xl gap-4 bg-background/10 px-12 sm:flex">
+          <div className="flex h-full w-1/2 -translate-y-16 flex-col items-center justify-center gap-8">
             <div className="flex w-full flex-col items-start justify-center gap-2">
               <span className="text-left text-4xl font-bold text-foreground transition-transform ease-in-out lg:text-5xl xl:text-6xl">
                 Share your files
@@ -55,12 +55,12 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <div className="flex h-full w-1/2 items-center justify-center">
+          <div className="flex h-full w-1/2 -translate-y-16 items-center justify-center">
             <HeroLarge />
           </div>
         </div>
       </div>
-      <div className="relative top-6 h-auto w-full rotate-180 text-background">
+      <div className="relative top-2 h-auto w-full rotate-180 text-background sm:top-6">
         <Wave />
       </div>
       <div className="flex h-screen flex-col items-center justify-center bg-foreground">
@@ -80,14 +80,14 @@ export default function Home() {
                 size={80}
                 className="h-16 w-16 text-accent sm:h-24 sm:w-24"
               />
-              <div className="h-fit w-4/5 sm:w-1/3 lg:w-1/2">
+              <div className="h-48 w-4/5 overflow-auto sm:h-fit sm:w-1/3 lg:w-1/2">
                 <Inbox />
               </div>
             </section>
           </div>
         </div>
       </div>
-      <div className="relative -top-6 h-auto w-full text-background">
+      <div className="relative -top-2 h-auto w-full text-background sm:-top-6">
         <Wave />
       </div>
       <div className="mb-12 flex h-auto flex-col items-center justify-center">
