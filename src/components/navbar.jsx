@@ -48,18 +48,17 @@ const Navbar = () => {
           Upload
         </span>
       </Link>
-      {deviceType !== "mobile" && (
-        <>
-          {session ? (
-            <Avatar>
-              <AvatarImage src={session.user.image} alt={session.user.name} />
-              <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
-          ) : (
-            <SignInButton />
-          )}
-        </>
-      )}
+
+      <>
+        {session ? (
+          <Avatar>
+            <AvatarImage src={session.user.image} alt={session.user.name} />
+            <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+        ) : (
+          <SignInButton />
+        )}
+      </>
     </nav>
   );
 };
