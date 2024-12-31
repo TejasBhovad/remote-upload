@@ -1,33 +1,37 @@
 "use client";
 import React, { useEffect } from "react";
 import { test } from "@/actions/test";
-import { Button } from "@/components/ui/button";
+import Uploader from "@/components/file/uploader";
 const UploadPage = () => {
   useEffect(() => {
     // Function to handle beforeunload event
     const handleTabClose = async () => {
-      // Call the test action
       test();
     };
-
-    // Add event listener for when the user is about to leave the page
     window.addEventListener("beforeunload", handleTabClose);
-
-    // Cleanup function to remove event listener
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   return (
-    <div>
-      <h1>Upload Page</h1>
-      <Button
-        className="bg-accent text-xl font-semibold hover:bg-accent/90"
-        onClick={() => test()}
-      >
-        Test
-      </Button>
+    <div className="flex h-full flex-col items-center justify-center">
+      <div className="h-full w-full max-w-6xl p-4">
+        <Uploader />
+      </div>
+
+      {/* <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          // Do something with the response
+          console.log("Files: ", res);
+          alert("Upload Completed");
+        }}
+        onUploadError={(error) => {
+          // Do something with the error.
+          alert(`ERROR! ${error.message}`);
+        }}
+      /> */}
     </div>
   );
 };
