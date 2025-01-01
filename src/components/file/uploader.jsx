@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { X, Upload } from "lucide-react";
+import { useUploadThing } from "@/utils/uploadthing";
 import { motion } from "motion/react";
 import AnimatedButton from "../AnimatedButton";
 import {
@@ -11,7 +12,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 const Uploader = () => {
@@ -20,6 +20,126 @@ const Uploader = () => {
   const [duplicateFile, setDuplicateFile] = useState(null);
   const [duplicateIndex, setDuplicateIndex] = useState(null);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const { startUpload } = useUploadThing("fileUploader", {
+    onClientUploadComplete: (res) => {
+      if (res) {
+        // Preserve existing uploaded files and add new ones
+        setUploadedFiles((prevFiles) => {
+          const newFiles = res.map((file) => ({
+            key: file.key,
+            name: file.name,
+          }));
+
+          // Combine previous files with new files, avoiding duplicates
+          const combinedFiles = [...prevFiles];
+          newFiles.forEach((newFile) => {
+            const exists = combinedFiles.some(
+              (existingFile) => existingFile.name === newFile.name,
+            );
+            if (!exists) {
+              combinedFiles.push(newFile);
+            }
+          });
+
+          return combinedFiles;
+        });
+
+        setIsUploading(false);
+        console.log("Files uploaded successfully!");
+      }
+    },
+    onUploadError: (error) => {
+      setIsUploading(false);
+      console.log("Error occurred while uploading:", error);
+    },
+    onUploadBegin: () => {
+      setIsUploading(true);
+      console.log("Upload has begun");
+    },
+  });
+
+  const isFileAlreadyUploaded = (fileName) => {
+    return uploadedFiles.some((file) => file.name === fileName);
+  };
+
+  const handleFileSelect = async (event) => {
+    const files = Array.from(event.target.files);
+    const newFiles = files.filter((file) => !isFileAlreadyUploaded(file.name));
+
+    if (!checkForDuplicates(files)) {
+      // Update selected files
+      setSelectedFiles((prev) => {
+        const uniqueFiles = files.filter(
+          (file) =>
+            !prev.some((existingFile) => existingFile.name === file.name),
+        );
+        return [...prev, ...uniqueFiles];
+      });
+
+      if (newFiles.length > 0) {
+        try {
+          await startUpload(newFiles);
+        } catch (error) {
+          console.log("Upload failed:", error);
+          setIsUploading(false);
+        }
+      }
+    }
+  };
+
+  const handleDrop = useCallback(
+    async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+
+      const files = Array.from(e.dataTransfer.files);
+      const newFiles = files.filter(
+        (file) => !isFileAlreadyUploaded(file.name),
+      );
+
+      if (!checkForDuplicates(files)) {
+        // Update selected files
+        setSelectedFiles((prev) => {
+          const uniqueFiles = files.filter(
+            (file) =>
+              !prev.some((existingFile) => existingFile.name === file.name),
+          );
+          return [...prev, ...uniqueFiles];
+        });
+
+        if (newFiles.length > 0) {
+          try {
+            await startUpload(newFiles);
+          } catch (error) {
+            console.log("Upload failed:", error);
+            setIsUploading(false);
+          }
+        }
+      }
+    },
+    [uploadedFiles],
+  );
+
+  const removeFile = (indexToRemove) => {
+    const fileToRemove = selectedFiles[indexToRemove];
+
+    // Remove from selected files
+    setSelectedFiles((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+
+    // Remove from uploaded files
+    setUploadedFiles((prev) =>
+      prev.filter((file) => file.name !== fileToRemove.name),
+    );
+
+    console.log("File removed:", fileToRemove.name);
+    console.log("Currently uploaded files:", uploadedFiles);
+  };
 
   const checkForDuplicates = (newFiles) => {
     for (const file of newFiles) {
@@ -36,34 +156,36 @@ const Uploader = () => {
     return false;
   };
 
-  const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    if (!checkForDuplicates(files)) {
-      setSelectedFiles((prev) => [...prev, ...files]);
-    }
-  };
-
-  const handleDuplicateAction = (action) => {
+  const handleDuplicateAction = async (action) => {
     if (action === "overwrite") {
       setSelectedFiles((prev) => {
         const newFiles = [...prev];
         newFiles[duplicateIndex] = duplicateFile;
         return newFiles;
       });
+      if (!isFileAlreadyUploaded(duplicateFile.name)) {
+        try {
+          await startUpload([duplicateFile]);
+        } catch (error) {
+          console.log("Upload failed:", error);
+          setIsUploading(false);
+        }
+      }
     } else if (action === "keep-both") {
       setSelectedFiles((prev) => [...prev, duplicateFile]);
+      if (!isFileAlreadyUploaded(duplicateFile.name)) {
+        try {
+          await startUpload([duplicateFile]);
+        } catch (error) {
+          console.log("Upload failed:", error);
+          setIsUploading(false);
+        }
+      }
     }
-    // 'skip' doesn't require any action
 
     setShowDuplicateDialog(false);
     setDuplicateFile(null);
     setDuplicateIndex(null);
-  };
-
-  const removeFile = (indexToRemove) => {
-    setSelectedFiles((prev) =>
-      prev.filter((_, index) => index !== indexToRemove),
-    );
   };
 
   const handleDrag = useCallback((e) => {
@@ -83,19 +205,10 @@ const Uploader = () => {
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(false);
-
-      const files = Array.from(e.dataTransfer.files);
-      if (!checkForDuplicates(files)) {
-        setSelectedFiles((prev) => [...prev, ...files]);
-      }
-    },
-    [selectedFiles],
-  ); // Add selectedFiles to dependencies
+  // log the uploaded files
+  useEffect(() => {
+    console.log("Uploaded files:", uploadedFiles);
+  }, [uploadedFiles]);
 
   return (
     <div className="space-y-4 p-6">
@@ -176,7 +289,6 @@ const Uploader = () => {
               <span className="text-sm text-foreground/75">
                 {selectedFiles.length} file(s)
               </span>
-              {/* total size in mb */}
               <span className="text-sm text-foreground/75">
                 {(
                   selectedFiles.reduce((acc, file) => acc + file.size, 0) /
@@ -197,13 +309,50 @@ const Uploader = () => {
                 className="flex items-center justify-between rounded-md bg-secondary/75 p-3 backdrop-blur-sm"
               >
                 <div className="flex items-center gap-3 truncate pr-4">
-                  <div className="flex flex-col">
-                    <span className="truncate text-sm font-medium">
-                      {file.name}
-                    </span>
-                    <span className="text-xs text-foreground/75">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </span>
+                  <div className="flex items-center gap-2">
+                    {Array.from(uploadedFiles).some(
+                      (uploadedFile) => uploadedFile.name === file.name,
+                    ) ? (
+                      <svg
+                        className="h-5 w-5 text-green-500"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    ) : isUploading ? (
+                      <svg
+                        className="h-5 w-5 animate-spin text-blue-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    ) : null}
+                    <div className="flex flex-col">
+                      <span className="truncate text-sm font-medium">
+                        {file.name}
+                      </span>
+                      <span className="text-xs text-foreground/75">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <AnimatedButton
