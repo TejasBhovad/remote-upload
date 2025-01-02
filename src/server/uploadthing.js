@@ -11,5 +11,10 @@ export async function deleteFile({ fileId }) {
     throw new Error("File id is required");
   }
   console.log("Deleting file with id", fileId);
-  const res = utapi.deleteFiles(fileId);
+  try {
+    const res = utapi.deleteFiles(fileId);
+  } catch (e) {
+    console.error(e);
+    return NextResponse.error("Error deleting file", { status: 500 });
+  }
 }

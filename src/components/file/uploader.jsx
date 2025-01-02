@@ -30,7 +30,14 @@ const Uploader = () => {
   const [code, setCode] = useState(null);
 
   const handleStore = async () => {
-    const code = await storeFileUrls(uploadedFiles.map((file) => file.url));
+    // const code = await storeFileUrls(uploadedFiles.map((file) => file.url));
+    // instead store both the file name and the url as an object
+    const code = await storeFileUrls(
+      uploadedFiles.map((file) => ({
+        name: file.name,
+        url: file.url,
+      })),
+    );
     setCode(code);
     router.push(`/s/${code}`);
   };
@@ -393,7 +400,7 @@ const Uploader = () => {
         <Button
           variant=""
           onClick={handleStore}
-          disabled={selectedFiles.length === 0}
+          disabled={uploadedFiles.length === 0}
         >
           Store files
         </Button>

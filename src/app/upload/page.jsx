@@ -4,7 +4,6 @@ import { test } from "@/actions/test";
 import Uploader from "@/components/file/uploader";
 const UploadPage = () => {
   useEffect(() => {
-    // Function to handle beforeunload event
     const handleTabClose = async () => {
       test();
     };
@@ -19,19 +18,6 @@ const UploadPage = () => {
       <div className="h-full w-full max-w-6xl p-4">
         <Uploader />
       </div>
-
-      {/* <UploadButton
-        endpoint="imageUploader"
-        onClientUploadComplete={(res) => {
-          // Do something with the response
-          console.log("Files: ", res);
-          alert("Upload Completed");
-        }}
-        onUploadError={(error) => {
-          // Do something with the error.
-          alert(`ERROR! ${error.message}`);
-        }}
-      /> */}
     </div>
   );
 };
