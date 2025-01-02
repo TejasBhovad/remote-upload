@@ -2,6 +2,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import { X, Upload } from "lucide-react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { motion } from "motion/react";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { storeFileUrls } from "@/actions/redis";
 import AnimatedButton from "../AnimatedButton";
 import {
   AlertDialog,
@@ -13,8 +16,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { deleteFile } from "@/server/uploadthing";
 
 const Uploader = () => {
+  const router = useRouter();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [duplicateFile, setDuplicateFile] = useState(null);
@@ -22,29 +27,39 @@ const Uploader = () => {
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [code, setCode] = useState(null);
 
+  const handleStore = async () => {
+    const code = await storeFileUrls(uploadedFiles.map((file) => file.url));
+    setCode(code);
+    router.push(`/s/${code}`);
+  };
   const { startUpload } = useUploadThing("fileUploader", {
     onClientUploadComplete: (res) => {
       if (res) {
-        // Preserve existing uploaded files and add new ones
         setUploadedFiles((prevFiles) => {
           const newFiles = res.map((file) => ({
             key: file.key,
             name: file.name,
+            url: file.url,
           }));
 
-          // Combine previous files with new files, avoiding duplicates
-          const combinedFiles = [...prevFiles];
+          // For overwrite cases, replace existing files
+          const updatedFiles = [...prevFiles];
           newFiles.forEach((newFile) => {
-            const exists = combinedFiles.some(
+            const existingIndex = updatedFiles.findIndex(
               (existingFile) => existingFile.name === newFile.name,
             );
-            if (!exists) {
-              combinedFiles.push(newFile);
+            if (existingIndex !== -1) {
+              // Replace the existing file
+              updatedFiles[existingIndex] = newFile;
+            } else {
+              // Add new file
+              updatedFiles.push(newFile);
             }
           });
 
-          return combinedFiles;
+          return updatedFiles;
         });
 
         setIsUploading(false);
@@ -124,10 +139,17 @@ const Uploader = () => {
     [uploadedFiles],
   );
 
-  const removeFile = (indexToRemove) => {
+  const removeFile = async (indexToRemove) => {
     const fileToRemove = selectedFiles[indexToRemove];
+    console.log("Removing file:", fileToRemove);
+    // find key of file to delete
+    const key = uploadedFiles.find(
+      (file) => file.name === fileToRemove.name,
+    ).key;
 
-    // Remove from selected files
+    // delete file
+    await deleteFile({ fileId: key });
+
     setSelectedFiles((prev) =>
       prev.filter((_, index) => index !== indexToRemove),
     );
@@ -158,28 +180,34 @@ const Uploader = () => {
 
   const handleDuplicateAction = async (action) => {
     if (action === "overwrite") {
+      // First, delete the existing file if it was uploaded
+      const existingFile = uploadedFiles.find(
+        (file) => file.name === duplicateFile.name,
+      );
+
+      if (existingFile) {
+        try {
+          await deleteFile({
+            fileId: existingFile.key,
+          });
+        } catch (error) {
+          console.error("Error deleting existing file:", error);
+        }
+      }
+
+      // Update selected files
       setSelectedFiles((prev) => {
         const newFiles = [...prev];
         newFiles[duplicateIndex] = duplicateFile;
         return newFiles;
       });
-      if (!isFileAlreadyUploaded(duplicateFile.name)) {
-        try {
-          await startUpload([duplicateFile]);
-        } catch (error) {
-          console.log("Upload failed:", error);
-          setIsUploading(false);
-        }
-      }
-    } else if (action === "keep-both") {
-      setSelectedFiles((prev) => [...prev, duplicateFile]);
-      if (!isFileAlreadyUploaded(duplicateFile.name)) {
-        try {
-          await startUpload([duplicateFile]);
-        } catch (error) {
-          console.log("Upload failed:", error);
-          setIsUploading(false);
-        }
+
+      // Reupload the new file
+      try {
+        await startUpload([duplicateFile]);
+      } catch (error) {
+        console.log("Upload failed:", error);
+        setIsUploading(false);
       }
     }
 
@@ -187,7 +215,6 @@ const Uploader = () => {
     setDuplicateFile(null);
     setDuplicateIndex(null);
   };
-
   const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -228,11 +255,7 @@ const Uploader = () => {
             <AlertDialogCancel onClick={() => handleDuplicateAction("skip")}>
               Skip
             </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => handleDuplicateAction("keep-both")}
-            >
-              Keep Both
-            </AlertDialogAction>
+
             <AlertDialogAction
               onClick={() => handleDuplicateAction("overwrite")}
             >
@@ -366,6 +389,15 @@ const Uploader = () => {
           </div>
         </motion.div>
       )}
+      <div className="flex w-full items-center justify-center">
+        <Button
+          variant=""
+          onClick={handleStore}
+          disabled={selectedFiles.length === 0}
+        >
+          Store files
+        </Button>
+      </div>
     </div>
   );
 };

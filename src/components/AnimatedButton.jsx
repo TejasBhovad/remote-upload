@@ -4,7 +4,6 @@ const AnimatedButton = ({ children, onClick, className }) => {
   return (
     <motion.button
       className={`relative overflow-hidden rounded-full p-1 text-white ${className}`}
-      //   className="relative overflow-hidden rounded-full p-1 text-white"
       whileHover="hover"
       whileTap={{ scale: 0.95 }}
       initial="initial"

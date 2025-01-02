@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { Google } from "@/components/icons/google";
 import Wave from "@/assets/wave";
 import { Upload } from "lucide-react";
@@ -46,13 +46,15 @@ export default function Home() {
               Get your files delivered straight to your inbox
             </span>
             <div className="flex w-full items-start justify-start">
-              <Button
-                variant="ghost"
-                className="w-auto bg-accent px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/90 lg:px-6 lg:py-3 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl"
-                onClick={() => console.log("Hello World")}
-              >
-                Share files
-              </Button>
+              <Link href="/upload">
+                <Button
+                  variant="ghost"
+                  className="w-auto bg-accent px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/90 lg:px-6 lg:py-3 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl"
+                  onClick={() => console.log("Hello World")}
+                >
+                  Share files
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="flex h-full w-1/2 -translate-y-16 items-center justify-center">
