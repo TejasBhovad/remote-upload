@@ -26,8 +26,8 @@ export async function POST(request) {
     : [urls.split("/f/")[1]].filter(Boolean);
   console.log("Server log:", urlArray);
   console.log("Server log:", code);
-  await deleteFile({ fileId: urlArray });
-  await deleteCode({ code });
+  // await deleteFile({ fileId: urlArray });
+  // await deleteCode({ code });
 
   return new Response("Logged", { status: 200 });
 }

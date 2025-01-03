@@ -1,19 +1,30 @@
 "use client";
 
+import { Download } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { getFileUrls, doesCodeExist } from "@/actions/redis";
 import { TabUnloadDetector } from "@/components/file/tab-unloader";
 import { motion } from "motion/react";
+import { useQRCode } from "next-qrcode";
+import AnimatedButton from "@/components/AnimatedButton";
 const Page = ({ params }) => {
+  const { SVG } = useQRCode();
   const slug = use(params).slug;
+  const [showQR, setShowQR] = useState(true);
+  const [url, setUrl] = useState(` `);
   const [fileUrls, setFileUrls] = useState(null);
   const [error, setError] = useState(null);
-
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+  useEffect(() => {
+    setIsMounted(true);
+    if (typeof window !== "undefined") {
+      setUrl(`${window.location.origin}/s/${slug}`);
+    }
+  }, [slug]);
   useEffect(() => {
     const fetchUrls = async () => {
       try {
@@ -29,10 +40,28 @@ const Page = ({ params }) => {
     }
   }, [slug]);
 
+  const handleDownload = async (url, filename) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      // Clean up the URL object
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
+
   if (error) {
     return (
       <div className="flex h-full flex-col items-center justify-center">
-        <div className="h-full w-full max-w-6xl p-4">
+        <div className="h-full w-full max-w-4xl p-4">
           <p className="text-accent">{error}</p>
         </div>
       </div>
@@ -41,12 +70,12 @@ const Page = ({ params }) => {
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
-      <div className="h-full w-full max-w-6xl p-4">
+      <div className="flex h-full w-full max-w-6xl p-4">
         {fileUrls !== null ? (
           <>
             <TabUnloadDetector code={slug} isMounted={isMounted} />
 
-            <div className="space-y-2 px-2">
+            <div className="flex w-full flex-col gap-4 space-y-2 px-2">
               {fileUrls.map((file, index) => (
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
@@ -54,18 +83,57 @@ const Page = ({ params }) => {
                   key={index}
                   className="flex items-center justify-between rounded-md bg-secondary/75 p-3 backdrop-blur-sm"
                 >
-                  <div className="flex items-center gap-3 truncate pr-4">
-                    <div className="flex flex-col">
+                  <div className="flex w-full items-center gap-3 truncate px-3">
+                    <div className="flex w-full items-center justify-between">
                       <a
                         href={file.url}
-                        className="truncate text-sm font-medium transition-colors hover:text-accent sm:text-lg sm:font-semibold"
+                        referrerPolicy="no-referrer"
+                        target="_blank"
+                        className="text-md truncate font-medium transition-colors hover:text-accent sm:text-lg sm:font-semibold"
                       >
                         {file.name}
                       </a>
+                      <AnimatedButton
+                        className="rounded-full p-2 transition-colors"
+                        onClick={() => handleDownload(file.url, file.name)}
+                      >
+                        <Download className="h-5 w-5" />
+                      </AnimatedButton>
                     </div>
                   </div>
                 </motion.div>
               ))}
+              {showQR && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-center gap-4 rounded-lg bg-secondary/50 p-6 backdrop-blur-lg sm:gap-6 sm:p-8"
+                >
+                  <h3 className="text-lg font-semibold sm:text-xl">
+                    Scan to share
+                  </h3>
+                  <div className="rounded-lg bg-white p-2 sm:p-4">
+                    <SVG
+                      text={url}
+                      options={{
+                        margin: 2,
+                        width:
+                          typeof window !== "undefined" &&
+                          window.innerWidth < 640
+                            ? 200
+                            : 300,
+                        color: {
+                          dark: "#000000",
+                          light: "#FFFFFF",
+                        },
+                      }}
+                    />
+                  </div>
+                  <span className="text-sm text-foreground/75 sm:text-base">
+                    {url}
+                  </span>
+                </motion.div>
+              )}
             </div>
           </>
         ) : (
