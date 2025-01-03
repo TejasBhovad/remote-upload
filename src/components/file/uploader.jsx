@@ -396,11 +396,11 @@ const Uploader = () => {
           </div>
         </motion.div>
       )}
-      <div className="flex w-full items-center justify-center disabled:cursor-not-allowed">
+      <div className="flex w-full items-center justify-center">
         <Button
           onClick={handleStore}
           disabled={uploadedFiles.length === 0}
-          className="w-full min-w-36 cursor-not-allowed sm:w-auto"
+          className="w-full min-w-36 disabled:cursor-not-allowed sm:w-auto"
         >
           Share files
         </Button>

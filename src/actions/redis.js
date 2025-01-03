@@ -8,7 +8,7 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-const alphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+const alphabet = "1234567890";
 const generateCode = customAlphabet(alphabet, 4);
 
 export async function storeFileUrls(fileUrls) {
