@@ -17,15 +17,14 @@ export default function Home() {
         <div className="z-10 flex h-full w-full max-w-6xl flex-col justify-between gap-8 bg-red-400/0 px-12 py-4 sm:hidden">
           <div className="flex h-auto w-full flex-col gap-8">
             <Hero />
-
-            <Button
-              variant="ghost"
-              className="w-full bg-accent text-lg font-semibold text-foreground hover:bg-accent/90"
-              onClick={() => console.log("Hello World")}
-            >
-              <Google width={24} height={24} />
-              Sign in with Google
-            </Button>
+            <Link href="/scan">
+              <Button
+                variant="ghost"
+                className="w-full bg-accent text-lg font-semibold text-foreground hover:bg-accent/90"
+              >
+                Scan now
+              </Button>
+            </Link>
           </div>
 
           <span className="text-md py-8 text-center font-medium text-foreground">

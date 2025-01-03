@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <nav className="absolute flex h-16 w-full items-center justify-between px-6">
-      <Link className={`flex ${alignmentClass} w-full cursor-pointer`} href="/">
+      <Link className={`flex ${alignmentClass} cursor-pointer`} href="/">
         <span className="cursor-pointer text-2xl font-bold text-foreground sm:text-3xl">
           Remote
         </span>

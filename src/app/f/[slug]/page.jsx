@@ -15,7 +15,7 @@ const Page = ({ params }) => {
   const [fileUrls, setFileUrls] = useState(null);
   const [error, setError] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
-
+  // TODO: add loading state
   useEffect(() => {
     setIsMounted(true);
   }, []);
