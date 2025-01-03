@@ -39,7 +39,17 @@ const Page = ({ params }) => {
       fetchUrls();
     }
   }, [slug]);
+  const [copied, setCopied] = useState(false);
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(slug);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
   const handleDownload = async (url, filename) => {
     try {
       const response = await fetch(url);
@@ -75,7 +85,7 @@ const Page = ({ params }) => {
           <>
             <TabUnloadDetector code={slug} isMounted={isMounted} />
 
-            <div className="flex w-full flex-col gap-4 space-y-2 px-2">
+            <div className="flex h-full w-full flex-col gap-4 space-y-2 px-2">
               {fileUrls.map((file, index) => (
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
@@ -109,9 +119,9 @@ const Page = ({ params }) => {
                   animate={{ opacity: 1, y: 0 }}
                   className="flex flex-col items-center gap-4 rounded-lg bg-secondary/50 p-6 backdrop-blur-lg sm:gap-6 sm:p-8"
                 >
-                  <h3 className="text-lg font-semibold sm:text-xl">
-                    Scan to share
-                  </h3>
+                  <span className="text-sm text-foreground/75 sm:text-base">
+                    {url}
+                  </span>
                   <div className="rounded-lg bg-white p-2 sm:p-4">
                     <SVG
                       text={url}
@@ -129,15 +139,45 @@ const Page = ({ params }) => {
                       }}
                     />
                   </div>
-                  <span className="text-sm text-foreground/75 sm:text-base">
-                    {url}
-                  </span>
+
+                  <div className="flex flex-col items-center gap-2">
+                    <div
+                      onClick={handleCopy}
+                      className="grid cursor-pointer grid-cols-4 gap-2 transition-transform hover:scale-105 sm:gap-4"
+                    >
+                      {slug.split("").map((digit, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-2xl font-bold text-foreground hover:bg-secondary/80 sm:h-16 sm:w-16 sm:text-3xl"
+                        >
+                          {digit}
+                        </motion.div>
+                      ))}
+                    </div>
+                    {copied && (
+                      <motion.span
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-sm text-accent"
+                      >
+                        Copied to clipboard!
+                      </motion.span>
+                    )}
+                  </div>
                 </motion.div>
               )}
             </div>
           </>
         ) : (
-          <p className="text-accent">Invalid Path</p>
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="rounded bg-secondary px-3 py-2 text-lg font-semibold text-accent sm:text-xl">
+              Code is not valid
+            </span>
+          </div>
         )}
       </div>
     </div>

@@ -43,6 +43,9 @@ html {
     --radius: 0.5rem;
   }
   .dark {
+    --scrollbar-track-color: #0f1010; /* Dark mode track color */
+    --scrollbar-thumb-color: #202a28; /* Dark mode thumb color */
+    --scrollbar-thumb-hover-color: #263633; /* Dark mode thumb hover color */
     --background: 0 0% 4%;
     --foreground: 0 0% 100%;
     --card: 0 0% 3.9%;
@@ -89,4 +92,26 @@ html {
     filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.75));
     transition: all 0.3s;
   }
+}
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}
+::selection {
+  background: #16ab7c;
+  color: #0b0b08;
 }

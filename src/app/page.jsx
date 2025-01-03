@@ -82,7 +82,7 @@ export default function Home() {
                 size={80}
                 className="h-16 w-16 text-accent sm:h-24 sm:w-24"
               />
-              <div className="h-48 w-4/5 overflow-auto sm:h-fit sm:w-1/3 lg:w-1/2">
+              <div className="h-48 w-4/5 overflow-hidden sm:h-fit sm:w-1/3 lg:w-1/2">
                 <Inbox />
               </div>
             </section>
@@ -103,7 +103,7 @@ export default function Home() {
             </h1>
           </section>
           <section className="flex h-full w-full flex-col items-center justify-center gap-4 px-12 md:flex-row md:gap-8">
-            <div className="flex aspect-[3/4] w-full flex-col gap-2 rounded-md bg-foreground/10 p-4 sm:w-3/4 sm:translate-y-2 lg:w-1/3 lg:p-8">
+            <div className="flex aspect-[3/2] w-full flex-col gap-2 rounded-md bg-foreground/10 p-4 sm:w-3/4 sm:translate-y-2 lg:w-1/3 lg:p-8">
               <h1 className="h-fit w-full text-start text-2xl font-bold text-foreground lg:text-3xl">
                 100 Shares
               </h1>
@@ -134,7 +134,7 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="flex aspect-[3/4] w-full flex-col gap-2 rounded-md bg-accent/20 p-4 sm:w-3/4 lg:w-1/3 lg:p-8">
+            <div className="flex aspect-[3/2] w-full flex-col gap-2 rounded-md bg-accent/20 p-4 sm:w-3/4 lg:w-1/3 lg:p-8">
               <h1 className="h-fit w-full text-start text-2xl font-bold text-foreground lg:text-3xl">
                 1000 Shares
               </h1>
@@ -165,7 +165,7 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="flex aspect-[3/4] w-full flex-col gap-2 rounded-md bg-foreground/10 p-4 sm:w-3/4 sm:translate-y-2 lg:w-1/3 lg:p-8">
+            <div className="flex aspect-[3/2] w-full flex-col gap-2 rounded-md bg-foreground/10 p-4 sm:w-3/4 sm:translate-y-2 lg:w-1/3 lg:p-8">
               <h1 className="h-fit w-full text-start text-2xl font-bold text-foreground lg:text-3xl">
                 ∞ Shares
               </h1>
