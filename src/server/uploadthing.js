@@ -10,7 +10,7 @@ export async function deleteFile({ fileId }) {
   if (!fileId) {
     throw new Error("File id is required");
   }
-  console.log("Deleting file with id", fileId);
+  // console.log("Deleting file with id", fileId);
   try {
     const res = utapi.deleteFiles(fileId);
   } catch (e) {

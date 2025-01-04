@@ -51,7 +51,7 @@ const OTPPage = () => {
 
   const handleProceed = () => {
     if (isValidCode) {
-      console.log("Proceeding with code:", otpValue);
+      // console.log("Proceeding with code:", otpValue);
       router.push(`/f/${otpValue}`);
     }
   };

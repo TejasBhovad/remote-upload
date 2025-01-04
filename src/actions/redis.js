@@ -57,7 +57,7 @@ export async function doesCodeExist(code) {
 }
 
 export async function deleteCode({ code }) {
-  console.log("Deleting code", code);
+  // console.log("Deleting code", code);
   if (!code) {
     return NextResponse.error("Code is required", { status: 400 });
   }

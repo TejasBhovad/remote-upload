@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback, useEffect } from "react";
 import { X, Upload } from "lucide-react";
 import { useUploadThing } from "@/utils/uploadthing";
@@ -70,16 +71,16 @@ const Uploader = () => {
         });
 
         setIsUploading(false);
-        console.log("Files uploaded successfully!");
+        // console.log("Files uploaded successfully!");
       }
     },
     onUploadError: (error) => {
       setIsUploading(false);
-      console.log("Error occurred while uploading:", error);
+      // console.log("Error occurred while uploading:", error);
     },
     onUploadBegin: () => {
       setIsUploading(true);
-      console.log("Upload has begun");
+      // console.log("Upload has begun");
     },
   });
 
@@ -105,7 +106,7 @@ const Uploader = () => {
         try {
           await startUpload(newFiles);
         } catch (error) {
-          console.log("Upload failed:", error);
+          // console.log("Upload failed:", error);
           setIsUploading(false);
         }
       }
@@ -137,7 +138,7 @@ const Uploader = () => {
           try {
             await startUpload(newFiles);
           } catch (error) {
-            console.log("Upload failed:", error);
+            // console.log("Upload failed:", error);
             setIsUploading(false);
           }
         }
@@ -148,7 +149,7 @@ const Uploader = () => {
 
   const removeFile = async (indexToRemove) => {
     const fileToRemove = selectedFiles[indexToRemove];
-    console.log("Removing file:", fileToRemove);
+    // console.log("Removing file:", fileToRemove);
     // find key of file to delete
     const key = uploadedFiles.find(
       (file) => file.name === fileToRemove.name,
@@ -166,8 +167,8 @@ const Uploader = () => {
       prev.filter((file) => file.name !== fileToRemove.name),
     );
 
-    console.log("File removed:", fileToRemove.name);
-    console.log("Currently uploaded files:", uploadedFiles);
+    // console.log("File removed:", fileToRemove.name);
+    // console.log("Currently uploaded files:", uploadedFiles);
   };
 
   const checkForDuplicates = (newFiles) => {
@@ -213,7 +214,7 @@ const Uploader = () => {
       try {
         await startUpload([duplicateFile]);
       } catch (error) {
-        console.log("Upload failed:", error);
+        // console.log("Upload failed:", error);
         setIsUploading(false);
       }
     }
@@ -238,11 +239,6 @@ const Uploader = () => {
     e.stopPropagation();
     setIsDragging(false);
   }, []);
-
-  // log the uploaded files
-  useEffect(() => {
-    console.log("Uploaded files:", uploadedFiles);
-  }, [uploadedFiles]);
 
   return (
     <div className="space-y-4 p-6">

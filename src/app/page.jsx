@@ -49,7 +49,6 @@ export default function Home() {
                 <Button
                   variant="ghost"
                   className="w-auto bg-accent px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/90 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl"
-                  onClick={() => console.log("Hello World")}
                 >
                   Share files
                 </Button>
@@ -118,7 +117,6 @@ export default function Home() {
               <Button
                 variant="ghost"
                 className="w-full bg-accent/25 text-lg font-semibold text-foreground hover:bg-accent/30"
-                onClick={() => console.log("Hello World")}
               >
                 Get Started
               </Button>
@@ -149,7 +147,6 @@ export default function Home() {
               <Button
                 variant="ghost"
                 className="w-full bg-foreground text-lg font-semibold text-background hover:bg-foreground/90 hover:text-background"
-                onClick={() => console.log("Hello World")}
               >
                 Get Started
               </Button>
@@ -177,7 +174,6 @@ export default function Home() {
               <Button
                 variant="ghost"
                 className="w-full bg-accent/25 text-lg font-semibold text-foreground hover:bg-accent/30"
-                onClick={() => console.log("Hello World")}
               >
                 Get Started
               </Button>

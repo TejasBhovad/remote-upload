@@ -1,23 +1,44 @@
 "use client";
-
+import { useSession } from "next-auth/react";
 import { Download } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { getFileUrls, doesCodeExist } from "@/actions/redis";
-import { TabUnloadDetector } from "@/components/file/tab-unloader";
+import { sendEmail } from "@/actions/email";
 import { motion } from "motion/react";
 import { useQRCode } from "next-qrcode";
 import AnimatedButton from "@/components/AnimatedButton";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 const Page = ({ params }) => {
+  const { data: session } = useSession();
   const { SVG } = useQRCode();
   const slug = use(params).slug;
-  const [showQR, setShowQR] = useState(true);
+  const [showQR, setShowQR] = useState(false);
   const [url, setUrl] = useState(` `);
   const [fileUrls, setFileUrls] = useState(null);
   const [error, setError] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  const [emailSent, setEmailSent] = useState(false);
   // TODO: add loading state
   useEffect(() => {
     setIsMounted(true);
+    if (slug) {
+      const checkCode = async () => {
+        try {
+          const exists = await doesCodeExist(slug);
+          if (!exists) {
+            setError("Code does not exist");
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      };
+      checkCode();
+    }
   }, []);
   useEffect(() => {
     setIsMounted(true);
@@ -39,6 +60,17 @@ const Page = ({ params }) => {
       fetchUrls();
     }
   }, [slug]);
+
+  useEffect(() => {
+    if (session && session.user) {
+      setEmail(session.user.email);
+      setName(session.user.name);
+      if (session.user.image) {
+        setProfileImage(session.user.image);
+      }
+    }
+  }, [session]);
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -78,14 +110,73 @@ const Page = ({ params }) => {
     );
   }
 
+  const handleSendEmail = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("recipient", email);
+    formData.append("fileUrls", JSON.stringify(fileUrls));
+    formData.append("name", name);
+    formData.append("profileImage", profileImage);
+    const response = await sendEmail(formData);
+
+    if (response.success) {
+      setEmailSent(true);
+      // Reset the state after 3 seconds
+      setTimeout(() => {
+        setEmailSent(false);
+      }, 3000);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="flex h-full w-full max-w-6xl p-4">
+        {/* <div className="h-auto w-full"></div> */}
         {fileUrls !== null ? (
           <>
-            {/* <TabUnloadDetector code={slug} isMounted={isMounted} /> */}
-
             <div className="flex h-full w-full flex-col gap-4 space-y-2 px-2">
+              <section className="flex w-full gap-2">
+                <Button
+                  onClick={() => setShowQR(!showQR)}
+                  className="rounded-full px-4 py-2 transition-colors"
+                >
+                  {showQR ? "Hide QR" : "Show QR"}
+                </Button>
+                {email ? (
+                  <Button
+                    className={`rounded-full px-4 py-2 transition-all ${
+                      emailSent
+                        ? "bg-foreground text-background hover:bg-foreground/90"
+                        : ""
+                    }`}
+                    onClick={handleSendEmail}
+                    disabled={loading || emailSent}
+                  >
+                    {loading ? (
+                      <span className="flex items-center gap-2">
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></span>
+                        Sending...
+                      </span>
+                    ) : emailSent ? (
+                      <span className="flex items-center gap-2">
+                        <Check className="h-4 w-4" />
+                        Email Sent!
+                      </span>
+                    ) : (
+                      "Share via Email"
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    className="rounded-full px-4 py-2 transition-colors"
+                    disabled
+                  >
+                    Login to share via email
+                  </Button>
+                )}
+              </section>
+
               {fileUrls.map((file, index) => (
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
@@ -175,7 +266,7 @@ const Page = ({ params }) => {
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <span className="rounded bg-secondary px-3 py-2 text-lg font-semibold text-accent sm:text-xl">
-              Code is not valid
+              Loading...
             </span>
           </div>
         )}
