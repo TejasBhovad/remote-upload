@@ -63,9 +63,7 @@ export const FilesEmail = ({
             <Text className="text-[14px] leading-[24px] text-black">
               Find the files you needed attached to this email. If you have any
               questions, please contact us at {""}
-              <Link href="https://tejasbhovad.vercel.app/contact">
-                our Contact page
-              </Link>
+              <Link href="https://tejasbhovad.com">our Contact page</Link>
             </Text>
 
             <Section className="mb-[32px] mt-[32px] text-center">
