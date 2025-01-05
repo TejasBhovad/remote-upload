@@ -13,6 +13,9 @@ export const ourFileRouter = {
     "application/zip": { maxFileSize: "4MB", maxFileCount: 5 },
     blob: { maxFileSize: "4MB", maxFileCount: 5 },
     text: { maxFileSize: "4MB", maxFileCount: 5 },
+    video: { maxFileSize: "4MB", maxFileCount: 5 },
+    audio: { maxFileSize: "4MB", maxFileCount: 5 },
+    pdf: { maxFileSize: "4MB", maxFileCount: 5 },
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {

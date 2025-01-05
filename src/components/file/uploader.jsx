@@ -29,6 +29,9 @@ const Uploader = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [code, setCode] = useState(null);
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [failedFile, setFailedFile] = useState(null);
 
   const handleStore = async () => {
     // const code = await storeFileUrls(uploadedFiles.map((file) => file.url));
@@ -52,17 +55,14 @@ const Uploader = () => {
             url: file.url,
           }));
 
-          // For overwrite cases, replace existing files
           const updatedFiles = [...prevFiles];
           newFiles.forEach((newFile) => {
             const existingIndex = updatedFiles.findIndex(
               (existingFile) => existingFile.name === newFile.name,
             );
             if (existingIndex !== -1) {
-              // Replace the existing file
               updatedFiles[existingIndex] = newFile;
             } else {
-              // Add new file
               updatedFiles.push(newFile);
             }
           });
@@ -71,16 +71,24 @@ const Uploader = () => {
         });
 
         setIsUploading(false);
-        // console.log("Files uploaded successfully!");
       }
     },
     onUploadError: (error) => {
       setIsUploading(false);
-      // console.log("Error occurred while uploading:", error);
+      setErrorMessage(`Error uploading file: ${error.message}`);
+      setShowErrorDialog(true);
+
+      // Remove the failed file from selectedFiles
+      if (failedFile) {
+        setSelectedFiles((prev) =>
+          prev.filter((file) => file.name !== failedFile.name),
+        );
+        setFailedFile(null);
+      }
     },
-    onUploadBegin: () => {
+    onUploadBegin: (file) => {
       setIsUploading(true);
-      // console.log("Upload has begun");
+      setFailedFile(file);
     },
   });
 
@@ -138,7 +146,7 @@ const Uploader = () => {
           try {
             await startUpload(newFiles);
           } catch (error) {
-            // console.log("Upload failed:", error);
+            console.log("Upload failed:", error);
             setIsUploading(false);
           }
         }
@@ -149,26 +157,30 @@ const Uploader = () => {
 
   const removeFile = async (indexToRemove) => {
     const fileToRemove = selectedFiles[indexToRemove];
-    // console.log("Removing file:", fileToRemove);
-    // find key of file to delete
-    const key = uploadedFiles.find(
+
+    // Find the uploaded file (if it exists)
+    const uploadedFile = uploadedFiles.find(
       (file) => file.name === fileToRemove.name,
-    ).key;
+    );
 
-    // delete file
-    await deleteFile({ fileId: key });
+    // If the file was uploaded, delete it from the server
+    if (uploadedFile?.key) {
+      try {
+        await deleteFile({ fileId: uploadedFile.key });
+        // Remove from uploaded files
+        setUploadedFiles((prev) =>
+          prev.filter((file) => file.name !== fileToRemove.name),
+        );
+      } catch (error) {
+        setErrorMessage(`Error removing file: ${error.message}`);
+        setShowErrorDialog(true);
+      }
+    }
 
+    // Always remove from selected files
     setSelectedFiles((prev) =>
       prev.filter((_, index) => index !== indexToRemove),
     );
-
-    // Remove from uploaded files
-    setUploadedFiles((prev) =>
-      prev.filter((file) => file.name !== fileToRemove.name),
-    );
-
-    // console.log("File removed:", fileToRemove.name);
-    // console.log("Currently uploaded files:", uploadedFiles);
   };
 
   const checkForDuplicates = (newFiles) => {
@@ -214,7 +226,7 @@ const Uploader = () => {
       try {
         await startUpload([duplicateFile]);
       } catch (error) {
-        // console.log("Upload failed:", error);
+        console.log("Upload failed:", error);
         setIsUploading(false);
       }
     }
@@ -263,6 +275,20 @@ const Uploader = () => {
               onClick={() => handleDuplicateAction("overwrite")}
             >
               Overwrite
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Upload Error</AlertDialogTitle>
+            <AlertDialogDescription>{errorMessage}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowErrorDialog(false)}>
+              OK
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
