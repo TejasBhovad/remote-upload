@@ -25,8 +25,8 @@ export async function POST(req) {
   }
   const { email, filenames, username, image } = await req.json();
 
-  console.log("Sending email to", email, username, image);
-  console.log("File URLs:", filenames);
+  // console.log("Sending email to", email, username, image);
+  // console.log("File URLs:", filenames);
   const resend = new Resend(RESEND_API_KEY);
 
   const attachments = await Promise.all(
