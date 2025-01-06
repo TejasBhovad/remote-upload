@@ -2,7 +2,7 @@
 
 File sharing website which allows you to transfer files from a PC straight to your email w/o any login.
 
-![Landing](.github/landing.png)
+![Landing](.github/landing.jpeg)
 
 ## Features
 
@@ -23,8 +23,6 @@ File sharing website which allows you to transfer files from a PC straight to yo
 - UploadThing
 - ShadCN UI
 - Resend email
-
-> Note: This project is still in development and some features may not work as expected.
 
 ## License
 
