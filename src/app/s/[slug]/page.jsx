@@ -7,38 +7,48 @@ import { TabUnloadDetector } from "@/components/file/tab-unloader";
 import { motion } from "motion/react";
 import { useQRCode } from "next-qrcode";
 import AnimatedButton from "@/components/AnimatedButton";
+
 const Page = ({ params }) => {
   const { SVG } = useQRCode();
   const slug = use(params).slug;
   const [showQR, setShowQR] = useState(true);
-  const [url, setUrl] = useState(` `);
+  const [url, setUrl] = useState(``);
   const [fileUrls, setFileUrls] = useState(null);
   const [error, setError] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [codeExists, setCodeExists] = useState(null);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== "undefined") {
       setUrl(`${window.location.origin}/s/${slug}`);
     }
   }, [slug]);
+
   useEffect(() => {
-    const fetchUrls = async () => {
+    const checkCodeAndFetchUrls = async () => {
       try {
-        const urls = await getFileUrls(slug);
-        setFileUrls(urls);
+        setIsLoading(true);
+        const exists = await doesCodeExist(slug);
+        setCodeExists(exists);
+
+        if (exists) {
+          const urls = await getFileUrls(slug);
+          setFileUrls(urls);
+        }
       } catch (err) {
         setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (slug) {
-      fetchUrls();
+      checkCodeAndFetchUrls();
     }
   }, [slug]);
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -50,6 +60,7 @@ const Page = ({ params }) => {
       console.error("Failed to copy:", err);
     }
   };
+
   const handleDownload = async (url, filename) => {
     try {
       const response = await fetch(url);
@@ -61,19 +72,58 @@ const Page = ({ params }) => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      // Clean up the URL object
       window.URL.revokeObjectURL(downloadUrl);
     } catch (err) {
       console.error("Download failed:", err);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-accent" />
+          <span className="text-lg font-medium text-foreground/75">
+            Loading...
+          </span>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <div className="h-full w-full max-w-4xl p-4">
-          <p className="text-accent">{error}</p>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-accent"
+          >
+            {error}
+          </motion.p>
         </div>
+      </div>
+    );
+  }
+
+  // Code doesn't exist state
+  if (codeExists === false) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-lg bg-secondary/50 p-6 backdrop-blur-lg"
+        >
+          <span className="text-lg font-semibold text-accent">
+            This code doesn't exist or has expired
+          </span>
+        </motion.div>
       </div>
     );
   }
