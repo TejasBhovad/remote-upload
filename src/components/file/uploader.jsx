@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useCallback, useEffect } from "react";
 import { X, Upload } from "lucide-react";
 import { useUploadThing } from "@/utils/uploadthing";
@@ -6,7 +7,7 @@ import { motion } from "motion/react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { storeFileUrls } from "@/actions/redis";
-import AnimatedButton from "../AnimatedButton";
+import AnimatedButton from "../animated-button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,8 +19,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { deleteFile } from "@/server/uploadthing";
+import { usePostHog } from "posthog-js/react";
 
 const Uploader = () => {
+  const posthog = usePostHog();
   const router = useRouter();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -48,6 +51,10 @@ const Uploader = () => {
   const { startUpload } = useUploadThing("fileUploader", {
     onClientUploadComplete: (res) => {
       if (res) {
+        posthog.capture("file_uploaded", {
+          file_count: res.length,
+          file_names: res.map((file) => file.name),
+        });
         setUploadedFiles((prevFiles) => {
           const newFiles = res.map((file) => ({
             key: file.key,

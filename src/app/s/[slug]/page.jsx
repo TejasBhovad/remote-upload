@@ -6,7 +6,7 @@ import { getFileUrls, doesCodeExist } from "@/actions/redis";
 import { TabUnloadDetector } from "@/components/file/tab-unloader";
 import { motion } from "motion/react";
 import { useQRCode } from "next-qrcode";
-import AnimatedButton from "@/components/AnimatedButton";
+import AnimatedButton from "@/components/animated-button";
 
 const Page = ({ params }) => {
   const { SVG } = useQRCode();

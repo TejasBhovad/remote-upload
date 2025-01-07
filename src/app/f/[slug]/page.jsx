@@ -6,7 +6,7 @@ import { getFileUrls, doesCodeExist } from "@/actions/redis";
 import { sendEmail } from "@/actions/email";
 import { motion } from "motion/react";
 import { useQRCode } from "next-qrcode";
-import AnimatedButton from "@/components/AnimatedButton";
+import AnimatedButton from "@/components/animated-button";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 const Page = ({ params }) => {

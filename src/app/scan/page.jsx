@@ -1,4 +1,5 @@
 "use client";
+import { usePostHog } from "posthog-js/react";
 import React, { useState } from "react";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import {
@@ -11,6 +12,7 @@ import ScannerComponent from "@/components/file/scanner";
 import { useRouter } from "next/navigation";
 
 const OTPPage = () => {
+  const posthog = usePostHog();
   const router = useRouter();
   const [otpValue, setOtpValue] = useState("");
   const [error, setError] = useState("");
@@ -41,6 +43,9 @@ const OTPPage = () => {
     const code = extractCodeFromURL(scannedValue);
 
     if (code && code.length === 4) {
+      posthog.capture("otp_scanned", {
+        otp_code: code,
+      });
       setOtpValue(code);
       setIsValidCode(true);
     } else {
@@ -53,6 +58,9 @@ const OTPPage = () => {
     if (isValidCode) {
       // console.log("Proceeding with code:", otpValue);
       router.push(`/f/${otpValue}`);
+      posthog.capture("otp_proceed", {
+        otp_code: otpValue,
+      });
     }
   };
 
