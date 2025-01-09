@@ -1,0 +1,6 @@
+{
+  "name": "Remote Upload",
+  "short_name": "RemoteUpload",
+  "description": "Share files via email and QRs with ease",
+  "start_url": "/"
+}
