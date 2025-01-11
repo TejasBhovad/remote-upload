@@ -118,7 +118,7 @@ export default function Home() {
                 variant="ghost"
                 className="w-full bg-accent/25 text-lg font-semibold text-foreground hover:bg-accent/30"
               >
-                Get Started
+                Coming Soon
               </Button>
               <div className="flex flex-col gap-2 py-4">
                 <span className="flex h-fit w-full items-center gap-2 text-start text-lg font-medium text-foreground/75">
@@ -148,7 +148,7 @@ export default function Home() {
                 variant="ghost"
                 className="w-full bg-foreground text-lg font-semibold text-background hover:bg-foreground/90 hover:text-background"
               >
-                Get Started
+                Coming Soon
               </Button>
               <div className="flex flex-col gap-2 py-4">
                 <span className="flex h-fit w-full items-center gap-2 text-start text-lg font-medium text-foreground/75">
@@ -175,7 +175,7 @@ export default function Home() {
                 variant="ghost"
                 className="w-full bg-accent/25 text-lg font-semibold text-foreground hover:bg-accent/30"
               >
-                Get Started
+                Coming Soon
               </Button>
               <div className="flex flex-col gap-2 py-4">
                 <span className="flex h-fit w-full items-center gap-2 text-start text-lg font-medium text-foreground/75">
