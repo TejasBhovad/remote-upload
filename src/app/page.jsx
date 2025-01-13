@@ -25,6 +25,14 @@ export default function Home() {
                 Scan now
               </Button>
             </Link>
+            <Link href="/upload">
+              <Button
+                variant="ghost"
+                className="w-full bg-accent/10 text-lg font-semibold text-foreground hover:bg-accent/15"
+              >
+                Share files
+              </Button>
+            </Link>
           </div>
 
           <span className="text-md py-8 text-center font-medium text-foreground">
@@ -44,13 +52,21 @@ export default function Home() {
             <span className="w-full items-start justify-start text-left text-lg font-medium text-foreground transition-transform ease-in-out lg:text-xl xl:text-xl">
               Get your files delivered straight to your inbox
             </span>
-            <div className="flex w-full items-start justify-start">
+            <div className="flex w-full items-start justify-start gap-4">
               <Link href="/upload">
                 <Button
                   variant="ghost"
-                  className="w-auto bg-accent px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/90 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl"
+                  className="w-auto bg-accent px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/90 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
                 >
                   Share files
+                </Button>
+              </Link>
+              <Link href="/scan">
+                <Button
+                  variant="ghost"
+                  className="w-auto bg-accent/10 px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/15 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
+                >
+                  Scan now
                 </Button>
               </Link>
             </div>

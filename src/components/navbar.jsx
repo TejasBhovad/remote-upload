@@ -1,6 +1,5 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -13,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { User } from "lucide-react";
+import { User, Loader2 } from "lucide-react";
 const useDeviceType = () => {
   const [deviceType, setDeviceType] = useState("");
 
@@ -40,7 +39,7 @@ const useDeviceType = () => {
 };
 
 const Navbar = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const deviceType = useDeviceType();
   const alignmentClass = pathname === "/" ? "justify-start" : "justify-center";
@@ -60,7 +59,11 @@ const Navbar = () => {
       </Link>
 
       <>
-        {session ? (
+        {status === "loading" ? (
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          </div>
+        ) : session ? (
           <Popover>
             <PopoverTrigger>
               <Avatar>
