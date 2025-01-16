@@ -52,7 +52,7 @@ const OTPPage = () => {
   const extractCodeFromURL = (url) => {
     try {
       const urlObj = new URL(url);
-      const pathParts = urlObj.pathname.split("/s/");
+      const pathParts = urlObj.pathname.split("/f/");
       const codeIndex = pathParts.findIndex((part) => part.length === 4);
       return codeIndex > 0 && pathParts[codeIndex]
         ? pathParts[codeIndex]
