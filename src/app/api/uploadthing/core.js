@@ -9,13 +9,13 @@ const auth = (req) => ({ id: "fakeId" }); // Fake auth function
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   fileUploader: f({
-    image: { maxFileSize: "4MB", maxFileCount: 5 },
-    "application/zip": { maxFileSize: "4MB", maxFileCount: 5 },
-    blob: { maxFileSize: "4MB", maxFileCount: 5 },
-    text: { maxFileSize: "4MB", maxFileCount: 5 },
-    video: { maxFileSize: "4MB", maxFileCount: 5 },
-    audio: { maxFileSize: "4MB", maxFileCount: 5 },
-    pdf: { maxFileSize: "4MB", maxFileCount: 5 },
+    image: { maxFileSize: "100MB", maxFileCount: 5 },
+    "application/zip": { maxFileSize: "100MB", maxFileCount: 5 },
+    blob: { maxFileSize: "100MB", maxFileCount: 5 },
+    text: { maxFileSize: "100MB", maxFileCount: 5 },
+    video: { maxFileSize: "100MB", maxFileCount: 5 },
+    audio: { maxFileSize: "100MB", maxFileCount: 5 },
+    pdf: { maxFileSize: "100MB", maxFileCount: 5 },
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
