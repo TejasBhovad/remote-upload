@@ -100,7 +100,7 @@ const OTPPage = () => {
       )}
 
       <div
-        className={`flex flex-col items-center gap-6 ${deviceType === "desktop" ? "rounded-lg bg-accent p-[1px] shadow-sm" : ""}`}
+        className={`flex flex-col items-center gap-6 ${deviceType === "desktop" ? "rounded-lg p-[1px] shadow-sm" : ""}`}
       >
         <InputOTP
           maxLength={4}
@@ -144,7 +144,7 @@ const OTPPage = () => {
   );
 
   const renderScanner = () => (
-    <div className="relative flex aspect-square w-72 items-center justify-center rounded-md bg-accent p-2">
+    <div className="relative flex aspect-square w-72 items-center justify-center rounded-md p-2">
       <span className="absolute text-lg text-foreground sm:text-xl">
         Enable Camera
       </span>
