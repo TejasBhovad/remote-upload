@@ -88,6 +88,19 @@ const OTPPage = () => {
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter" && isValidCode) {
+        handleProceed();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isValidCode, otpValue]);
   const renderOTPInput = () => (
     <div className="flex flex-col items-center gap-4">
       {deviceType === "desktop" && (
