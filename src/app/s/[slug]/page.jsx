@@ -22,7 +22,7 @@ const Page = ({ params }) => {
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== "undefined") {
-      setUrl(`${window.location.origin}/s/${slug}`);
+      setUrl(`${window.location.origin}/f/${slug}`);
     }
   }, [slug]);
 
