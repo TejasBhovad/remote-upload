@@ -4,6 +4,10 @@ File sharing website which allows you to transfer files from a PC straight to yo
 
 ![Landing](.github/landing.jpeg)
 
+<div align="center" style="background-color: white; padding: 10px; border-radius: 8px;">
+  <img src=".github/peerlist.svg" alt="Launch on Peerlist" width="200" />
+</div>
+
 ## Features
 
 - Privacy first: we don't store any user files on our servers
