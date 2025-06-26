@@ -1,6 +1,5 @@
 "use server";
-// export const runtime = "edge";
-// export const preferredRegion = ["bom1", "hnd1"];
+
 import { NextResponse } from "next/server";
 import { redis, generateCode } from "@/lib/redis";
 export async function storeFileUrls(fileUrls) {
