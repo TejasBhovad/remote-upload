@@ -136,7 +136,8 @@ const Page = ({ params }) => {
             <TabUnloadDetector code={slug} isMounted={isMounted} />
 
             <div className="flex h-full w-full flex-col gap-4 space-y-2 px-2">
-              {fileUrls.map((file, index) => (
+              {/* Ensure fileUrls is always an array before mapping */}
+              {(Array.isArray(fileUrls) ? fileUrls : []).map((file, index) => (
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}

@@ -1,37 +1,59 @@
 "use server";
 
-import { NextResponse } from "next/server";
 import { redis, generateCode } from "@/lib/redis";
+
 export async function storeFileUrls(fileUrls) {
   let code;
   let isUnique = false;
+  let attempts = 0;
+  const maxAttempts = 5;
 
-  while (!isUnique) {
+  while (!isUnique && attempts < maxAttempts) {
     code = generateCode();
+
     const exists = await redis.exists(code);
+
     if (!exists) {
       isUnique = true;
     }
+    attempts++;
   }
 
-  await redis.setex(code, 86400, JSON.stringify(fileUrls));
+  if (!isUnique) {
+    throw new Error("Unable to generate unique code");
+  }
+
+  // Ensure fileUrls is an array before storing
+  const dataToStore = Array.isArray(fileUrls) ? fileUrls : [];
+  await redis.setex(code, 86400, JSON.stringify(dataToStore));
 
   return code;
 }
 
 export async function getFileUrls(code) {
-  if (!code) {
-    return NextResponse.error("Code is required", { status: 400 });
+  if (!code || code.length !== 4) {
+    throw new Error("Invalid code");
   }
-  if (code.length !== 4) {
-    return NextResponse.error("Invalid code", { status: 400 });
+
+  const exists = await redis.exists(code);
+
+  if (!exists) {
+    throw new Error("Code does not exist");
   }
-  if (!doesCodeExist(code)) {
-    return NextResponse.error("Code does not exist", { status: 404 });
+
+  const data = await redis.get(code);
+
+  // Handle parsing and ensure we return an array
+  try {
+    if (typeof data === "string") {
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error("Error parsing Redis data:", error);
+    return [];
   }
-  const urls = await redis.get(code);
-  return urls;
-  // return JSON.parse(urls);
 }
 
 export async function doesCodeExist(code) {
@@ -48,16 +70,16 @@ export async function doesCodeExist(code) {
 }
 
 export async function deleteCode({ code }) {
-  // console.log("Deleting code", code);
-  if (!code) {
-    return NextResponse.error("Code is required", { status: 400 });
+  if (!code || code.length !== 4) {
+    throw new Error("Invalid code");
   }
-  if (code.length !== 4) {
-    return NextResponse.error("Invalid code", { status: 400 });
+
+  const exists = await redis.exists(code);
+
+  if (!exists) {
+    throw new Error("Code does not exist");
   }
-  if (!doesCodeExist(code)) {
-    return NextResponse.error("Code does not exist", { status: 404 });
-  }
+
   await redis.del(code);
-  return new Response("File deleted successfully", { status: 200 });
+  return { success: true };
 }

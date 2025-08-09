@@ -6,6 +6,8 @@ import {
 } from "@/actions/redis";
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 // POST /api/files - Store files and get code
 export async function POST(request) {
   try {
