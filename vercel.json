@@ -5,20 +5,6 @@
       "schedule": "0 20 * * *"
     }
   ],
-  "functions": {
-    "src/app/api/expo/files/route.js": {
-      "runtime": "edge"
-    },
-    "src/app/api/expo/exist/route.js": {
-      "runtime": "edge"
-    },
-    "src/app/api/unload/route.js": {
-      "runtime": "edge"
-    },
-    "src/app/api/delete/route.js": {
-      "runtime": "edge"
-    }
-  },
   "regions": ["bom1"],
   "headers": [
     {
