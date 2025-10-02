@@ -1,29 +1,26 @@
-import React from 'react'
-import { signIn } from '@/lib/auth-client';
-
+import React from "react";
+import { signIn } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 const SignIn = () => {
   const handleGoogleSignIn = async () => {
     try {
-      await  signIn.social({
+      await signIn.social({
         provider: "google",
         callbackURL: "/",
-        errorCallbackURL: "/error", 
+        errorCallbackURL: "/error",
         newUserCallbackURL: "/",
         disableRedirect: false,
       });
     } catch (error) {
-      console.error('Sign in error:', error);
+      console.error("Sign in error:", error);
     }
   };
 
   return (
-    <button 
-      onClick={handleGoogleSignIn} 
-      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-    >
-      Sign in with Google
-    </button>
-  )
-}
+    <Button className={"font-semibold"} onClick={handleGoogleSignIn}>
+      Sign in
+    </Button>
+  );
+};
 
-export default SignIn
+export default SignIn;
