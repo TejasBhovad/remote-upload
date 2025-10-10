@@ -19,7 +19,7 @@ export default function Home() {
                 variant="ghost"
                 className="w-full bg-primary text-lg font-semibold text-black hover:bg-primary/90"
               >
-                Scan now
+                Receive files
               </Button>
             </Link>
             <Link href="/upload">
@@ -63,7 +63,7 @@ export default function Home() {
                   variant="ghost"
                   className="w-auto bg-primary/10 px-4 py-2 text-lg font-semibold text-foreground hover:bg-primary/15 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
                 >
-                  Scan now
+                  Receive files
                 </Button>
               </Link>
             </div>

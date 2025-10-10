@@ -13,7 +13,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { User, Loader2, Mail, LogOut } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 const useDeviceType = () => {
   const [deviceType, setDeviceType] = useState("");

@@ -16,7 +16,7 @@ test("should navigate to the scan page", async ({ page }) => {
 
   await page.waitForLoadState("networkidle");
 
-  await page.getByRole("link", { name: "Scan now" }).click();
+  await page.getByRole("link", { name: "Receive files" }).click();
 
   await expect(page).toHaveURL("https://localhost:3000/scan");
   await expect(page.locator("h1")).toContainText("scan code here");
