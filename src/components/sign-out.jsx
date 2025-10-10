@@ -20,7 +20,7 @@ const SignOut = () => {
   };
 
   return (
-    <Button className={"font-semibold"} onClick={handleSignOut}>
+    <Button className={"font-semibold h-7 rounded"} onClick={handleSignOut}>
       Sign Out
     </Button>
   );
