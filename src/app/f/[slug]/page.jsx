@@ -14,10 +14,12 @@ const Page = ({ params }) => {
   const { SVG } = useQRCode();
   const slug = use(params).slug;
   const [showQR, setShowQR] = useState(false);
-  const [url, setUrl] = useState(` `);
+  const [url, setUrl] = useState(``);
   const [fileUrls, setFileUrls] = useState(null);
   const [error, setError] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [codeExists, setCodeExists] = useState(null);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -28,40 +30,31 @@ const Page = ({ params }) => {
 
   useEffect(() => {
     setIsMounted(true);
-    if (slug) {
-      const checkCode = async () => {
-        try {
-          const exists = await doesCodeExist(slug);
-          if (!exists) {
-            setError("Code does not exist");
-          }
-        } catch (err) {
-          setError(err.message);
-        }
-      };
-      checkCode();
-    }
-  }, []);
-
-  useEffect(() => {
-    setIsMounted(true);
     if (typeof window !== "undefined") {
       setUrl(`${window.location.origin}/s/${slug}`);
     }
   }, [slug]);
 
   useEffect(() => {
-    const fetchUrls = async () => {
+    const checkCodeAndFetchUrls = async () => {
       try {
-        const urls = await getFileUrls(slug);
-        setFileUrls(urls);
+        setIsLoading(true);
+        const exists = await doesCodeExist(slug);
+        setCodeExists(exists);
+
+        if (exists) {
+          const urls = await getFileUrls(slug);
+          setFileUrls(urls);
+        }
       } catch (err) {
         setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (slug) {
-      fetchUrls();
+      checkCodeAndFetchUrls();
     }
   }, [slug]);
 
@@ -139,7 +132,42 @@ const Page = ({ params }) => {
     setLoading(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent" />
+          <span className="text-sm font-medium text-foreground/75">
+            Loading your files...
+          </span>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (error) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="w-full max-w-md rounded-xl border border-destructive/20 bg-secondary p-6 text-center"
+        >
+          <div className="mb-3 text-4xl">⚠️</div>
+          <h2 className="mb-2 text-xl font-semibold text-foreground">Error</h2>
+          <p className="text-sm text-foreground/70">{error}</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (codeExists === false) {
     return (
       <div className="flex h-[calc(100vh-64px)] items-center justify-center p-4">
         <motion.div
@@ -379,8 +407,8 @@ const Page = ({ params }) => {
                           }}
                         >
                           <Check
-                            strokeWidth={3}
                             className="h-5 w-5 text-black"
+                            strokeWidth={3}
                           />
                         </motion.div>
                       ) : downloadingFiles[index] === "error" ? (
@@ -417,9 +445,10 @@ const Page = ({ params }) => {
             transition={{ duration: 0.4 }}
             className="flex items-center justify-center p-8"
           >
-            <div className="text-center">
-              <div className="mb-3 inline-block h-8 w-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
-              <p className="text-sm font-medium text-foreground">Loading...</p>
+            <div className="rounded-xl bg-secondary/50 p-6 text-center backdrop-blur-sm">
+              <span className="text-sm font-semibold text-accent">
+                Code is not valid
+              </span>
             </div>
           </motion.div>
         )}
