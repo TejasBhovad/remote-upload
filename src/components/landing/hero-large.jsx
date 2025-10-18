@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
 import { Mail } from "@/components/icons/mail";
 import { File, FileArchive, Image } from "lucide-react";
-import { animate, spring } from "motion";
+import { animate, spring } from "motion/react";
 import { useEffect, useRef } from "react";
 const HeroLarge = () => {
   const mailRef = useRef(null);
@@ -24,7 +25,7 @@ const HeroLarge = () => {
         {
           duration: 0.35,
           easing: spring(),
-        },
+        }
       );
     }
 
@@ -40,7 +41,7 @@ const HeroLarge = () => {
         },
         {
           duration: 0.5,
-        },
+        }
       );
     }
 
@@ -56,7 +57,7 @@ const HeroLarge = () => {
         },
         {
           duration: 0.5,
-        },
+        }
       );
     }
 
@@ -72,7 +73,7 @@ const HeroLarge = () => {
         },
         {
           duration: 0.5,
-        },
+        }
       );
     }
   }, []);

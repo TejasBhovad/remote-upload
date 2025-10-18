@@ -1,5 +1,5 @@
 "use client";
-import { usePostHog } from "posthog-js/react";
+
 import React, { useState, useEffect } from "react";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import {
@@ -8,7 +8,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
-import ScannerComponent from "@/components/file/scanner";
+import ScannerComponent from "@/components/scanner-component";
 import { useRouter } from "next/navigation";
 
 const useDeviceType = () => {
@@ -22,7 +22,7 @@ const useDeviceType = () => {
       }
       if (
         /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
-          userAgent,
+          userAgent
         )
       ) {
         return "mobile";
@@ -37,7 +37,6 @@ const useDeviceType = () => {
 };
 
 const OTPPage = () => {
-  const posthog = usePostHog();
   const router = useRouter();
   const [otpValue, setOtpValue] = useState("");
   const [error, setError] = useState("");
@@ -68,9 +67,6 @@ const OTPPage = () => {
     const code = extractCodeFromURL(scannedValue);
 
     if (code && code.length === 4) {
-      posthog.capture("otp_scanned", {
-        otp_code: code,
-      });
       setOtpValue(code);
       setIsValidCode(true);
     } else {
@@ -82,9 +78,6 @@ const OTPPage = () => {
   const handleProceed = () => {
     if (isValidCode) {
       router.push(`/f/${otpValue}`);
-      posthog.capture("otp_proceed", {
-        otp_code: otpValue,
-      });
     }
   };
 

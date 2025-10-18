@@ -1,63 +1,60 @@
 "use client";
-import { useSession } from "next-auth/react";
-import { Download } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
+import { Download, Mail, QrCode, FileText, Check, X } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { getFileUrls, doesCodeExist } from "@/actions/redis";
 import { sendEmail } from "@/actions/email";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useQRCode } from "next-qrcode";
-import AnimatedButton from "@/components/animated-button";
-import { Check } from "lucide-react";
+import AnimatedButton from "@/components/ui/animated-button";
 import { Button } from "@/components/ui/button";
+
 const Page = ({ params }) => {
-  const { data: session } = useSession();
+  const { data: session, isPending, error: sessionError } = useSession();
   const { SVG } = useQRCode();
   const slug = use(params).slug;
   const [showQR, setShowQR] = useState(false);
-  const [url, setUrl] = useState(` `);
+  const [url, setUrl] = useState(``);
   const [fileUrls, setFileUrls] = useState(null);
   const [error, setError] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [codeExists, setCodeExists] = useState(null);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [emailSent, setEmailSent] = useState(false);
-  // TODO: add loading state
-  useEffect(() => {
-    setIsMounted(true);
-    if (slug) {
-      const checkCode = async () => {
-        try {
-          const exists = await doesCodeExist(slug);
-          if (!exists) {
-            setError("Code does not exist");
-          }
-        } catch (err) {
-          setError(err.message);
-        }
-      };
-      checkCode();
-    }
-  }, []);
+  const [downloadingFiles, setDownloadingFiles] = useState({});
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== "undefined") {
       setUrl(`${window.location.origin}/s/${slug}`);
     }
   }, [slug]);
+
   useEffect(() => {
-    const fetchUrls = async () => {
+    const checkCodeAndFetchUrls = async () => {
       try {
-        const urls = await getFileUrls(slug);
-        setFileUrls(urls);
+        setIsLoading(true);
+        const exists = await doesCodeExist(slug);
+        setCodeExists(exists);
+
+        if (exists) {
+          const urls = await getFileUrls(slug);
+          setFileUrls(urls);
+        }
       } catch (err) {
         setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (slug) {
-      fetchUrls();
+      checkCodeAndFetchUrls();
     }
   }, [slug]);
 
@@ -71,8 +68,6 @@ const Page = ({ params }) => {
     }
   }, [session]);
 
-  const [copied, setCopied] = useState(false);
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(slug);
@@ -82,8 +77,11 @@ const Page = ({ params }) => {
       console.error("Failed to copy:", err);
     }
   };
-  const handleDownload = async (url, filename) => {
+
+  const handleDownload = async (url, filename, index) => {
     try {
+      setDownloadingFiles((prev) => ({ ...prev, [index]: "loading" }));
+
       const response = await fetch(url);
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
@@ -93,22 +91,28 @@ const Page = ({ params }) => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      // Clean up the URL object
       window.URL.revokeObjectURL(downloadUrl);
+
+      setDownloadingFiles((prev) => ({ ...prev, [index]: "success" }));
+      setTimeout(() => {
+        setDownloadingFiles((prev) => {
+          const newState = { ...prev };
+          delete newState[index];
+          return newState;
+        });
+      }, 2000);
     } catch (err) {
       console.error("Download failed:", err);
+      setDownloadingFiles((prev) => ({ ...prev, [index]: "error" }));
+      setTimeout(() => {
+        setDownloadingFiles((prev) => {
+          const newState = { ...prev };
+          delete newState[index];
+          return newState;
+        });
+      }, 2000);
     }
   };
-
-  if (error) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center">
-        <div className="h-full w-full max-w-4xl p-4">
-          <p className="text-accent">{error}</p>
-        </div>
-      </div>
-    );
-  }
 
   const handleSendEmail = async () => {
     setLoading(true);
@@ -121,7 +125,6 @@ const Page = ({ params }) => {
 
     if (response.success) {
       setEmailSent(true);
-      // Reset the state after 3 seconds
       setTimeout(() => {
         setEmailSent(false);
       }, 3000);
@@ -129,147 +132,325 @@ const Page = ({ params }) => {
     setLoading(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent" />
+          <span className="text-sm font-medium text-foreground/75">
+            Loading your files...
+          </span>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="w-full max-w-md rounded-xl border border-destructive/20 bg-secondary p-6 text-center"
+        >
+          <div className="mb-3 text-4xl">⚠️</div>
+          <h2 className="mb-2 text-xl font-semibold text-foreground">Error</h2>
+          <p className="text-sm text-foreground/70">{error}</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (codeExists === false) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="w-full max-w-md rounded-xl bg-secondary/50 p-6 text-center backdrop-blur-sm"
+        >
+          <div className="mb-3 text-4xl">🔒</div>
+          <h2 className="mb-2 text-xl font-semibold text-foreground">
+            Code Not Found
+          </h2>
+          <p className="text-sm text-foreground/70">
+            This code doesn't exist or has expired
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex h-full flex-col items-center justify-center">
-      <div className="flex h-full w-full max-w-6xl p-4">
-        {/* <div className="h-auto w-full"></div> */}
+    <div className="flex h-[calc(100vh-64px)] items-start justify-center p-4">
+      <div className="w-full max-w-3xl">
         {fileUrls !== null ? (
-          <>
-            <div className="flex h-full w-full flex-col gap-4 space-y-2 px-2">
-              <section className="flex w-full gap-2">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+            className="space-y-4"
+          >
+            {/* Header */}
+            <div className="rounded-xl bg-secondary/50 p-5 backdrop-blur-sm">
+              <h1 className="mb-1 text-xl font-semibold text-foreground">
+                Shared Files
+              </h1>
+              <p className="mb-4 text-sm text-foreground/60">
+                {Array.isArray(fileUrls) ? fileUrls.length : 0} file
+                {fileUrls?.length !== 1 ? "s" : ""} available
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-2">
                 <Button
                   onClick={() => setShowQR(!showQR)}
-                  className="rounded-full px-4 py-2 transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-200"
+                  variant={showQR ? "default" : "outline"}
+                  size="sm"
                 >
+                  <QrCode className="h-4 w-4" />
                   {showQR ? "Hide QR" : "Show QR"}
                 </Button>
+
                 {email ? (
                   <Button
-                    className={`rounded-full px-4 py-2 transition-all ${
-                      emailSent
-                        ? "bg-foreground text-background hover:bg-foreground/90"
-                        : ""
+                    className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-200 ${
+                      emailSent ? "bg-primary hover:bg-primary/80" : ""
                     }`}
                     onClick={handleSendEmail}
                     disabled={loading || emailSent}
+                    size="sm"
                   >
                     {loading ? (
-                      <span className="flex items-center gap-2">
-                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></span>
+                      <>
+                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-background border-t-transparent"></span>
                         Sending...
-                      </span>
+                      </>
                     ) : emailSent ? (
-                      <span className="flex items-center gap-2">
+                      <>
                         <Check className="h-4 w-4" />
-                        Email Sent!
-                      </span>
+                        Sent!
+                      </>
                     ) : (
-                      "Share via Email"
+                      <>
+                        <Mail className="h-4 w-4" />
+                        Email
+                      </>
                     )}
                   </Button>
                 ) : (
                   <Button
-                    className="rounded-full px-4 py-2 transition-colors"
+                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm"
+                    variant="outline"
                     disabled
+                    size="sm"
                   >
-                    Login to share via email
+                    <Mail className="h-4 w-4" />
+                    Login to email
                   </Button>
                 )}
-              </section>
+              </div>
+            </div>
 
-              {/* Ensure fileUrls is always an array before mapping */}
+            {/* QR Code Section */}
+            <AnimatePresence>
+              {showQR && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="rounded-xl bg-secondary/50 p-5 backdrop-blur-sm">
+                    <div className="flex flex-col items-center gap-4">
+                      <p className="text-center text-xs text-foreground/60">
+                        {url}
+                      </p>
+
+                      <div className="rounded-xl bg-white p-4 shadow-sm">
+                        <SVG
+                          text={url}
+                          options={{
+                            margin: 1,
+                            width:
+                              typeof window !== "undefined" &&
+                              window.innerWidth < 640
+                                ? 180
+                                : 220,
+                            color: {
+                              dark: "#000000",
+                              light: "#FFFFFF",
+                            },
+                          }}
+                        />
+                      </div>
+
+                      <div className="flex flex-col items-center gap-2">
+                        <p className="text-xs font-medium text-foreground/70">
+                          Access Code
+                        </p>
+                        <div
+                          onClick={handleCopy}
+                          className="grid cursor-pointer grid-cols-4 gap-2"
+                        >
+                          {slug.split("").map((digit, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                delay: index * 0.05,
+                                duration: 0.3,
+                                ease: [0.25, 0.1, 0.25, 1],
+                              }}
+                              whileTap={{ opacity: 0.7 }}
+                              className="flex h-12 w-12 items-center justify-center rounded-lg bg-background text-xl font-semibold text-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground"
+                            >
+                              {digit}
+                            </motion.div>
+                          ))}
+                        </div>
+                        <AnimatePresence>
+                          {copied && (
+                            <motion.span
+                              initial={{ opacity: 0, y: -5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -5 }}
+                              transition={{
+                                duration: 0.2,
+                                ease: [0.25, 0.1, 0.25, 1],
+                              }}
+                              className="text-xs text-primary"
+                            >
+                              Copied to clipboard!
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Files List */}
+            <div className="space-y-2">
               {(Array.isArray(fileUrls) ? fileUrls : []).map((file, index) => (
                 <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
                   key={index}
-                  className="flex items-center justify-between rounded-md bg-secondary/75 p-3 backdrop-blur-sm"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: index * 0.05,
+                    duration: 0.4,
+                    ease: [0.25, 0.1, 0.25, 1],
+                  }}
+                  className="flex items-center justify-between rounded-xl bg-secondary/50 p-4 backdrop-blur-sm transition-colors duration-200 hover:bg-secondary/70"
                 >
-                  <div className="flex w-full items-center gap-3 truncate px-3">
-                    <div className="flex w-full items-center justify-between">
+                  <div className="flex min-w-0 flex-1 items-center gap-3">
+                    <div className="rounded-lg bg-accent/10 p-2.5 text-accent">
+                      <FileText className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
                       <a
                         href={file.url}
                         referrerPolicy="no-referrer"
                         target="_blank"
-                        className="text-md truncate font-medium transition-colors hover:text-accent sm:text-lg sm:font-semibold"
+                        className="block truncate text-sm font-medium text-foreground transition-colors duration-200 hover:text-accent"
                       >
                         {file.name}
                       </a>
-                      <AnimatedButton
-                        className="rounded-full p-2 transition-colors"
-                        onClick={() => handleDownload(file.url, file.name)}
-                      >
-                        <Download className="h-5 w-5" />
-                      </AnimatedButton>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-              {showQR && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex flex-col items-center gap-4 rounded-lg bg-secondary/50 p-6 backdrop-blur-lg sm:gap-6 sm:p-8"
-                >
-                  <span className="text-sm text-foreground/75 sm:text-base">
-                    {url}
-                  </span>
-                  <div className="rounded-lg bg-white p-2 sm:p-4">
-                    <SVG
-                      text={url}
-                      options={{
-                        margin: 2,
-                        width:
-                          typeof window !== "undefined" &&
-                          window.innerWidth < 640
-                            ? 200
-                            : 300,
-                        color: {
-                          dark: "#000000",
-                          light: "#FFFFFF",
-                        },
-                      }}
-                    />
                   </div>
 
-                  <div className="flex flex-col items-center gap-2">
-                    <div
-                      onClick={handleCopy}
-                      className="grid cursor-pointer grid-cols-4 gap-2 transition-transform hover:scale-105 sm:gap-4"
-                    >
-                      {slug.split("").map((digit, index) => (
+                  <motion.button
+                    whileTap={{ opacity: 0.7 }}
+                    transition={{ duration: 0.1 }}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all duration-200 ${
+                      downloadingFiles[index] === "success"
+                        ? "bg-primary text-white"
+                        : downloadingFiles[index] === "error"
+                          ? "bg-red-600/50 text-white"
+                          : "bg-accent text-accent-foreground hover:bg-accent/90"
+                    }`}
+                    onClick={() => handleDownload(file.url, file.name, index)}
+                    disabled={downloadingFiles[index] === "loading"}
+                  >
+                    <AnimatePresence mode="wait">
+                      {downloadingFiles[index] === "loading" ? (
+                        <motion.span
+                          key="loading"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
+                          className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                        />
+                      ) : downloadingFiles[index] === "success" ? (
                         <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-2xl font-bold text-foreground hover:bg-secondary/80 sm:h-16 sm:w-16 sm:text-3xl"
+                          key="success"
+                          initial={{ opacity: 0, rotate: -90 }}
+                          animate={{ opacity: 1, rotate: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{
+                            duration: 0.2,
+                            ease: [0.25, 0.1, 0.25, 1],
+                          }}
                         >
-                          {digit}
+                          <Check
+                            className="h-5 w-5 text-black"
+                            strokeWidth={3}
+                          />
                         </motion.div>
-                      ))}
-                    </div>
-                    {copied && (
-                      <motion.span
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-sm text-accent"
-                      >
-                        Copied to clipboard!
-                      </motion.span>
-                    )}
-                  </div>
+                      ) : downloadingFiles[index] === "error" ? (
+                        <motion.div
+                          key="error"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <X className="h-5 w-5" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="download"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <Download className="h-5 w-5" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
                 </motion.div>
-              )}
+              ))}
             </div>
-          </>
+          </motion.div>
         ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <span className="rounded bg-secondary px-3 py-2 text-lg font-semibold text-accent sm:text-xl">
-              Loading...
-            </span>
-          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center justify-center p-8"
+          >
+            <div className="rounded-xl bg-secondary/50 p-6 text-center backdrop-blur-sm">
+              <span className="text-sm font-semibold text-accent">
+                Code is not valid
+              </span>
+            </div>
+          </motion.div>
         )}
       </div>
     </div>

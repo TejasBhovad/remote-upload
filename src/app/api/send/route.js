@@ -33,7 +33,7 @@ export async function POST(req) {
     filenames.map(async ({ name, url }) => ({
       filename: name,
       content: await URLToBase64(url),
-    })),
+    }))
   );
 
   //   console.log("Attachments:", attachments);

@@ -10,7 +10,7 @@ export async function GET() {
   try {
     // Load and encode the favicon
     const favicon = await fetch(
-      new URL("../../../../public/favicon.png", import.meta.url),
+      new URL("../../../../public/favicon.png", import.meta.url)
     ).then((res) => res.arrayBuffer());
 
     return new ImageResponse(
@@ -70,7 +70,7 @@ export async function GET() {
       {
         width: 1200,
         height: 630,
-      },
+      }
     );
   } catch (e) {
     console.error(e);

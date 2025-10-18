@@ -16,7 +16,7 @@ const ScannerComponent = ({ setQRContent }) => {
           console.log(err);
           if (err.name === "NotAllowedError") {
             alert(
-              "Camera access was denied. Please allow access from your browser settings to use the scanner.",
+              "Camera access was denied. Please allow access from your browser settings to use the scanner."
             );
           } else {
             alert("An error occurred while accessing the camera.");

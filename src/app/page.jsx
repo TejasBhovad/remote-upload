@@ -1,7 +1,4 @@
-"use client";
 import Link from "next/link";
-import { Google } from "@/components/icons/google";
-import Wave from "@/assets/wave";
 import { Upload } from "lucide-react";
 import Inbox from "@/components/landing/inbox";
 import Arrow from "@/components/icons/arrow";
@@ -9,7 +6,7 @@ import Hero from "@/components/landing/hero";
 import HeroLarge from "@/components/landing/hero-large";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import Wave from "@/components/icons/wave";
 export default function Home() {
   return (
     <div className="flex h-auto w-full flex-col">
@@ -20,15 +17,15 @@ export default function Home() {
             <Link href="/scan">
               <Button
                 variant="ghost"
-                className="w-full bg-accent text-lg font-semibold text-foreground hover:bg-accent/90"
+                className="w-full bg-primary text-lg font-semibold text-black hover:bg-primary/90"
               >
-                Scan now
+                Receive files
               </Button>
             </Link>
             <Link href="/upload">
               <Button
                 variant="ghost"
-                className="w-full bg-accent/10 text-lg font-semibold text-foreground hover:bg-accent/15"
+                className="w-full bg-primary/10 text-lg font-semibold text-foreground hover:bg-primary/15"
               >
                 Share files
               </Button>
@@ -45,7 +42,7 @@ export default function Home() {
               <span className="text-left text-4xl font-bold text-foreground transition-transform ease-in-out lg:text-5xl xl:text-6xl">
                 Share your files
               </span>
-              <span className="text-left text-4xl font-semibold text-accent transition-transform ease-in-out lg:text-5xl xl:text-6xl">
+              <span className="text-left text-4xl font-semibold text-primary transition-transform ease-in-out lg:text-5xl xl:text-6xl">
                 Without login
               </span>
             </div>
@@ -55,8 +52,8 @@ export default function Home() {
             <div className="flex w-full items-start justify-start gap-4">
               <Link href="/upload">
                 <Button
-                  variant="ghost"
-                  className="w-auto bg-accent px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/90 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
+                  variant="primary"
+                  className="w-auto bg-primary px-4 py-2 text-lg font-semibold text-black hover:bg-primary/90 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
                 >
                   Share files
                 </Button>
@@ -64,9 +61,9 @@ export default function Home() {
               <Link href="/scan">
                 <Button
                   variant="ghost"
-                  className="w-auto bg-accent/10 px-4 py-2 text-lg font-semibold text-foreground hover:bg-accent/15 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
+                  className="w-auto bg-primary/10 px-4 py-2 text-lg font-semibold text-foreground hover:bg-primary/15 md:py-4 lg:px-6 lg:text-xl xl:px-8 xl:py-4 xl:text-xl"
                 >
-                  Scan now
+                  Receive files
                 </Button>
               </Link>
             </div>
@@ -89,12 +86,12 @@ export default function Home() {
           </h2>
           <div className="flex h-full items-center justify-center">
             <section className="flex h-full flex-col items-center justify-center gap-2 overflow-hidden px-8 py-4 sm:h-auto sm:flex-row">
-              <div className="flex aspect-square w-48 items-center justify-center rounded-lg border-4 border-dashed border-accent bg-accent/25 sm:w-64 lg:w-96">
-                <Upload className="h-16 w-16 text-accent sm:h-24 sm:w-24" />
+              <div className="flex aspect-square w-48 items-center justify-center rounded-lg border-4 border-dashed border-primary bg-primary/25 sm:w-64 lg:w-96">
+                <Upload className="h-16 w-16 text-primary sm:h-24 sm:w-24" />
               </div>
               <Arrow
                 size={80}
-                className="h-16 w-16 text-accent sm:h-24 sm:w-24"
+                className="h-16 w-16 text-primary sm:h-24 sm:w-24"
               />
               <div className="h-48 w-4/5 overflow-hidden sm:h-fit sm:w-1/3 lg:w-1/2">
                 <Inbox />
@@ -112,7 +109,7 @@ export default function Home() {
             <h1 className="h-fit w-full text-center text-3xl font-semibold text-foreground lg:text-5xl xl:text-6xl">
               Focus on the Files
             </h1>
-            <h1 className="h-fit w-full text-center text-3xl font-semibold italic text-accent lg:text-5xl xl:text-6xl">
+            <h1 className="h-fit w-full text-center text-3xl font-semibold italic text-primary lg:text-5xl xl:text-6xl">
               not the Fees
             </h1>
           </section>
@@ -132,7 +129,7 @@ export default function Home() {
               </span>
               <Button
                 variant="ghost"
-                className="w-full bg-accent/25 text-lg font-semibold text-foreground hover:bg-accent/30"
+                className="w-full bg-primary/25 text-lg font-semibold text-foreground hover:bg-primary/30"
               >
                 Coming Soon
               </Button>
@@ -147,7 +144,7 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="flex aspect-[3/2] w-full flex-col gap-2 rounded-md bg-accent/20 p-4 sm:w-3/4 lg:w-1/3 lg:p-8">
+            <div className="flex aspect-[3/2] w-full flex-col gap-2 rounded-md bg-primary/20 p-4 sm:w-3/4 lg:w-1/3 lg:p-8">
               <h1 className="h-fit w-full text-start text-2xl font-bold text-foreground lg:text-3xl">
                 1000 Shares
               </h1>
@@ -189,7 +186,7 @@ export default function Home() {
               </span>
               <Button
                 variant="ghost"
-                className="w-full bg-accent/25 text-lg font-semibold text-foreground hover:bg-accent/30"
+                className="w-full bg-primary/25 text-lg font-semibold text-foreground hover:bg-primary/30"
               >
                 Coming Soon
               </Button>
