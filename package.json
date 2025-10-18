@@ -10,6 +10,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.27.0",
     "@axe-core/playwright": "^4.10.2",
     "@libsql/client": "^0.15.15",
     "@radix-ui/react-alert-dialog": "^1.1.15",
